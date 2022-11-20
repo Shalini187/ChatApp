@@ -35,18 +35,20 @@ export let signOut = (user: any, setLoading: Function) => {
         [
             {
                 text: "YES",
-                onPress: async () => {
+                onPress: () => {
                     setLoading(true);
                     firestore().collection('users').doc(user?.uid).update({ status: "offline" });
-                    try {
-                        let res: any = await auth().signOut();
-                        if (res) {
-                            Alert.alert('User signed out!');
-                            setLoading(false);
+                    setTimeout(async () => {
+                        try {
+                            let res: any = await auth().signOut();
+                            if (res) {
+                                Alert.alert('User signed out!');
+                                setLoading(false);
+                            }
+                        } catch (e) {
+                            Alert.alert('Retry!!!');
                         }
-                    } catch (e) {
-                        Alert.alert('Retry!!!');
-                    }
+                    }, 2000)
                 },
                 style: 'destructive'
             },
