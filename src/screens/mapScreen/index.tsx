@@ -1,35 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useIsFocused } from '@react-navigation/native';
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { AuthContext, FilterOptions, SystemCards, SystemSearch, ThemeProvider, WrapperContainer } from "../../components";
+import { AuthContext, FilterOptions, Loader, SystemCards, SystemSearch, ThemeProvider, WrapperContainer } from "../../components";
 import { COLORS, height, width } from "../../constants";
-import { getCurrentLocation, checkLocationPermission, getUsers, getLoginUsers, switchFilter, getDistanceFromLatLonInKm } from "../../utils";
-
+import { getUsers, getLoginUsers, switchFilter, getDistanceFromLatLonInKm } from "../../utils";
 
 const MapScreen = ({ navigation }: any) => {
     const { user }: any = useContext(AuthContext);
 
+    const [loading, setLoading] = useState<boolean>(true);
     let [data, setData] = useState<Array<any>>([]);
-    let [location, setLocation] = useState<any>();
     let [mapRef, setMapRef] = useState<any>(false);
     let [value, setValue] = useState<string>('');
     const [filter, setFilter] = useState<string>(`>10 KM`);
     const [loginUser, setLoginUser] = useState<any>(null);
 
-    const isFocused = useIsFocused();
-
     useEffect(() => {
         getLoginUsers(setLoginUser, user);
         getUsers(setData, user);
+        setTimeout(() => setLoading(false), 2000);
     }, []);
-
-    useEffect(() => {
-        if (isFocused) {
-            checkLocationPermission();
-            getCurrentLocation(setLocation);//To fetch current location
-        }
-        return () => { }
-    }, [isFocused]);
 
     useEffect(() => {
         let fetch = async () => {
@@ -39,6 +28,11 @@ const MapScreen = ({ navigation }: any) => {
         fetch();
     }, [filter]);
 
+    if (loading) {
+        return (
+            <Loader />
+        )
+    }
 
     return (
         <ThemeProvider
@@ -54,28 +48,32 @@ const MapScreen = ({ navigation }: any) => {
                                 customMapStyle={require('../../assets/themes/light.json')}
                                 zoomEnabled={true}
                                 zoomTapEnabled={true}
+                                onMapReady={() => setLoading(false)}
                                 showsCompass={true}
-                                showsUserLocation={true}
                                 initialRegion={{ ...loginUser?.[0]?.coordinates, latitudeDelta: 0.45, longitudeDelta: 0.3 }}
                                 rotateEnabled={true}
-                            >
-                                {
-                                    (data || [])?.map((ef: any, index: number) => {
-                                        let { uid, coordinates, name } = ef || {};
-                                        return (
-                                            <Marker
-                                                key={uid.concat(index)}
-                                                title={name}
-                                                draggable={false}
-                                                pinColor={COLORS.blue}
-                                                description={getDistanceFromLatLonInKm(loginUser?.[0]?.coordinates, coordinates)?.toString()}
-                                                tracksViewChanges={true}
-                                                coordinate={{ ...coordinates }}
-                                            />
-                                        )
-                                    })
+                                children={
+                                    <>
+                                        {
+                                            (data || [])?.map((ef: any, index: number) => {
+                                                let { uid, coordinates, name } = ef || {};
+                                                return (
+                                                    <Marker
+                                                        key={uid.concat(index)}
+                                                        title={name}
+                                                        draggable={false}
+                                                        pinColor={COLORS.blue}
+                                                        style={{ width: 250 }}
+                                                        description={getDistanceFromLatLonInKm(loginUser?.[0]?.coordinates, coordinates)?.toString()}
+                                                        tracksViewChanges={true}
+                                                        coordinate={{ ...coordinates }}
+                                                    />
+                                                )
+                                            })
+                                        }
+                                    </>
                                 }
-                            </MapView>
+                            />
                             <FilterOptions setFilter={setFilter} filter={filter} />
                             <SystemSearch value={value} setValue={setValue} />
                             <SystemCards search={value} mapRef={mapRef} data={data} navigation={navigation} />

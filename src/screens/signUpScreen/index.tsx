@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, Image, KeyboardAvoidingView, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
+import { View, Text, Image, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { loginStyles } from '../../styles';
-import { Button, Icon, Input, Spinner } from '@ui-kitten/components';
+import { Button, Icon, Input } from '@ui-kitten/components';
 import { COLORS } from '../../constants';
-import { ThemeProvider, WrapperContainer } from '../../components';
+import { Loader, ThemeProvider, WrapperContainer } from '../../components';
 
 
 interface IUser {
@@ -27,9 +27,7 @@ const SignupScreen = ({ navigation }: any) => {
 
     if (loading) {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Spinner size={'giant'} status={'primary'} />
-            </View>
+            <Loader />
         )
     }
 
@@ -47,7 +45,6 @@ const SignupScreen = ({ navigation }: any) => {
                 },
                 status: "online"
             })
-            setLoading(false)
         } catch (error: any) {
             if (error.code === 'auth/email-already-in-use') {
                 Alert.alert('The email address is already in use!');
@@ -62,6 +59,7 @@ const SignupScreen = ({ navigation }: any) => {
             }
             console.error(error);
         }
+        setTimeout(() => setLoading(false), 2000);
     }
 
 

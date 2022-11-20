@@ -21,9 +21,9 @@ const App = ({ params }: any) => {
   return (
     <ThemeProvider
       children={
-        <AuthContext.Provider value={{user, setuser}}>
+        <AuthContext.Provider value={{ user, setuser }}>
           <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={user ? 'Main' : 'Login'}>
               {
                 user ?
                   <>
@@ -32,8 +32,8 @@ const App = ({ params }: any) => {
                   </>
                   :
                   <>
-                    <Stack.Screen name="login" component={LoginScreen} options={{ headerShown: false }} initialParams={params} />
-                    <Stack.Screen name="signup" component={SignupScreen} options={{ headerShown: false }} initialParams={params} />
+                    <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} initialParams={params} />
+                    <Stack.Screen name="SignUp" component={SignupScreen} options={{ headerShown: false }} initialParams={params} />
                   </>
               }
             </Stack.Navigator>

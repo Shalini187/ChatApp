@@ -1,7 +1,7 @@
-import { Icon, Text } from "@ui-kitten/components";
+import { Icon, Spinner, Text } from "@ui-kitten/components";
 import React, { useContext, useEffect, useState } from "react";
 import { FlatList, RefreshControl, TouchableOpacity, View } from "react-native";
-import { AuthContext, HeaderBar, ThemeProvider, WrapperContainer } from "../../components";
+import { AuthContext, HeaderBar, Loader, ThemeProvider, WrapperContainer } from "../../components";
 import { COLORS } from "../../constants";
 import { getLoginUsers, getUsers, signOut, titleWords } from "../../utils";
 import { chatStyles } from '../../styles';
@@ -12,6 +12,7 @@ const ChatScreen = ({ navigation, route }: any) => {
     const { user }: any = useContext(AuthContext);
 
     const [users, setUsers] = useState<any>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [loginUser, setLoginUser] = useState<any>('');
 
@@ -25,6 +26,12 @@ const ChatScreen = ({ navigation, route }: any) => {
         setRefresh(false);
     }
 
+
+    if (loading) {
+        return (
+            <Loader />
+        )
+    }
     const RenderCard = ({ item, index }: any) => {
         let { name, uid, status } = item || {};
 
@@ -56,7 +63,7 @@ const ChatScreen = ({ navigation, route }: any) => {
                         <>
                             <View style={{ flex: 1 }}>
                                 <HeaderBar isBack={false} headerText={loginUser?.[0]?.name} extraProps={{ status: loginUser?.[0]?.status }} rightProps={() => (
-                                    <TouchableOpacity onPress={() => signOut(user)}>
+                                    <TouchableOpacity onPress={() => signOut(user, setLoading)}>
                                         <Icon
                                             pack={'material'}
                                             name={'logout'}
@@ -77,7 +84,12 @@ const ChatScreen = ({ navigation, route }: any) => {
                                             }}
                                         />
                                     }
-                                    contentContainerStyle = {{ paddingBottom: 100 }}
+                                    ListEmptyComponent={() => {
+                                        return (
+                                            <Loader />
+                                        )
+                                    }}
+                                    contentContainerStyle={{ paddingBottom: 100 }}
                                     renderItem={({ item, index }) => { return <RenderCard item={item} index={index} /> }}
                                     keyExtractor={(item) => item.uid}
                                 />

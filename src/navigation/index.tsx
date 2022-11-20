@@ -15,7 +15,7 @@ const Tabs = () => {
         <ThemeProvider
             children={
                 <Tab.Navigator
-                    initialRouteName="Payment"
+                    initialRouteName="ChatScreen"
                     screenOptions={{
                         headerShown: false,
                         tabBarActiveTintColor: COLORS.blue,

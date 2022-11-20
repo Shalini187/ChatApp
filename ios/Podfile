@@ -4,15 +4,16 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '13'
 install! 'cocoapods', :deterministic_uuids => false
 
-pre_install do |installer|
-  installer.pod_targets.each do |pod|
-    if pod.name.eql?('RNPermissions') || pod.name.start_with?('Permission-')
-      def pod.build_type;
-        Pod::BuildType.static_library # I assume you use CocoaPods >= 1.9
-      end
-    end
-  end
-end
+#For RN permission to stable out
+# pre_install do |installer|
+#   installer.pod_targets.each do |pod|
+#     if pod.name.eql?('RNPermissions') || pod.name.start_with?('Permission-')
+#       def pod.build_type;
+#         Pod::BuildType.static_library # I assume you use CocoaPods >= 1.9
+#       end
+#     end
+#   end
+# end
 
 target 'SenseHawk' do
   config = use_native_modules!
@@ -47,11 +48,7 @@ target 'SenseHawk' do
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path
   pod 'GoogleMaps'
-  
-  permissions_path = '../node_modules/react-native-permissions/ios'
-  pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
-  pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
-  pod 'Permission-LocationWhenInUse', :path => "#{permissions_path}/LocationWhenInUse"
+
 
   target 'SenseHawkTests' do
     inherit! :complete

@@ -1,59 +1,9 @@
-import Geolocation from '@react-native-community/geolocation';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import { checkMultiple, requestMultiple, PERMISSIONS, openSettings } from 'react-native-permissions';
 import { GiftedChat } from 'react-native-gifted-chat';
 
-export const getCurrentLocation = (onChange: any) => {
-    Geolocation.getCurrentPosition(
-        (position) => {
-            let { longitude, latitude } = position?.coords || {};
-            onChange({ longitude, latitude });
-        }, (error) => console.log(error.message), {
-        enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
-    }
-    );
-}
-
-export const checkLocationPermission = async () => {
-    const multiple = [PERMISSIONS.IOS.LOCATION_ALWAYS, PERMISSIONS.IOS.LOCATION_WHEN_IN_USE, PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION, PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
-    const locationStatus: any = await checkMultiple(multiple);
-    if (locationStatus.status != 'authorized') {
-        requestMultiple(multiple).then((statuses) => {
-            let status = statuses[PERMISSIONS.IOS.LOCATION_ALWAYS] || statuses[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] || statuses[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] || statuses[PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
-            switch (status) {
-                case 'granted': {
-                    return 'authorized';
-                }
-                default: {
-                    return (
-                        Alert.alert(
-                            "SenseHawk Would Like to Access the Location",
-                            "This app needs Location Permission to fetch current location",
-                            [
-                                {
-                                    text: "Open settings",
-                                    onPress: () => {
-                                        openSettings().catch(() => { });
-                                    },
-                                    style: 'destructive'
-                                },
-                                {
-                                    text: "Cancel",
-                                    onPress: () => { },
-                                    style: "cancel"
-                                }
-                            ]
-                        )
-                    )
-                }
-            }
-        });
-    } else {
-        return locationStatus.status;
-    }
-}
+export const isIos = Platform.OS == "ios";
 
 export const unregister = (setuser: Function) => {
     auth().onAuthStateChanged((user) => {
@@ -70,24 +20,43 @@ export let signIn = async (form: {}, setLoading: Function) => {
     setLoading(true);
     try {
         let userCredentials = await auth().signInWithEmailAndPassword(email, password);
-        setLoading(false);
+        if (userCredentials) {
+            setTimeout(() => setLoading(false), 2000);
+        };
     } catch (e: any) {
         Alert.alert('The email address or password is invalid!');
     }
 }
 
-export let signOut = (user: any) => {
-    firestore().collection('users').doc(user?.uid).update({ status: "offline" });
-    setTimeout(async () => {
-        try {
-            let res: any = await auth().signOut();
-            if (res) {
-                Alert.alert('User signed out!');
+export let signOut = (user: any, setLoading: Function) => {
+    Alert.alert(
+        "Are you Sure ?",
+        "you need to Sign Off !",
+        [
+            {
+                text: "YES",
+                onPress: async () => {
+                    setLoading(true);
+                    firestore().collection('users').doc(user?.uid).update({ status: "offline" });
+                    try {
+                        let res: any = await auth().signOut();
+                        if (res) {
+                            Alert.alert('User signed out!');
+                            setLoading(false);
+                        }
+                    } catch (e) {
+                        Alert.alert('Retry!!!');
+                    }
+                },
+                style: 'destructive'
+            },
+            {
+                text: "NO",
+                onPress: () => { },
+                style: "cancel"
             }
-        } catch (e) {
-            Alert.alert('Retry!!!');
-        }
-    }, 1000);
+        ]
+    )
 }
 
 export const docId = (uid: any, user: any) => uid > user.uid ? user.uid + "-" + uid : uid + "-" + user.uid

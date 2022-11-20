@@ -2,6 +2,7 @@
 
 buildscript {
     ext {
+        RNNKotlinVersion = "1.5.31"
         buildToolsVersion = "31.0.0"
         minSdkVersion = 21
         compileSdkVersion = 31
@@ -21,6 +22,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.2.1")
+        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("de.undercouch:gradle-download-task:5.0.1")
         classpath ("com.google.gms:google-services:4.3.13")

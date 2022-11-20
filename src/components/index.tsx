@@ -5,6 +5,7 @@ import WrapperContainer from "./wrapperComponent";
 import SystemSearch from './search';
 import SystemCards from './cards';
 import HeaderBar from "./header";
+import Loader from "./loader";
 
 const AuthContext = createContext({});
-export { FilterOptions, AuthContext, HeaderBar, SystemSearch, SystemCards, ThemeProvider, WrapperContainer };
+export { Loader, FilterOptions, AuthContext, HeaderBar, SystemSearch, SystemCards, ThemeProvider, WrapperContainer };

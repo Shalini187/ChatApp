@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, Image, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
-import { Button, Icon, Input, Spinner, Text } from '@ui-kitten/components';
+import { Button, Icon, Input, Text } from '@ui-kitten/components';
 import { loginStyles } from "../../styles";
 import { COLORS } from '../../constants';
-import { ThemeProvider, WrapperContainer } from '../../components';
+import { Loader, ThemeProvider, WrapperContainer } from '../../components';
 import { signIn } from '../../utils';
 
 interface IUser {
@@ -22,12 +22,9 @@ const LoginScreen = ({ navigation }: any) => {
 
     if (loading) {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Spinner size={'giant'} status={'primary'} />
-            </View>
+            <Loader />
         )
     }
-
 
     return (
         <ThemeProvider
@@ -65,7 +62,7 @@ const LoginScreen = ({ navigation }: any) => {
                                     onPress={() => signIn(form, setLoading)}>
                                     Login
                                 </Button>
-                                <TouchableOpacity onPress={() => navigation.navigate('signup')}>
+                                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                                     <Text style={{ textAlign: "center" }}>Dont have an account ?</Text>
                                 </TouchableOpacity>
                             </View>

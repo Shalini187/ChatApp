@@ -84,6 +84,7 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle" 
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -133,7 +134,23 @@ def reactNativeArchitectures() {
 android {
     ndkVersion rootProject.ext.ndkVersion
 
+    aaptOptions {
+        cruncherEnabled = false
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    dexOptions {
+        javaMaxHeapSize '4g'
+    }
 
     defaultConfig {
         applicationId "com.sensehawk"
@@ -141,6 +158,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+        resValue "string", "build_config_package", applicationId
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
@@ -218,16 +237,37 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('sensehawk.keystore')
+            storePassword 'sensehawk'
+            keyAlias 'sensehawk'
+            keyPassword 'sensehawk'
+        }
     }
     buildTypes {
         debug {
+            debuggable true
             signingConfig signingConfigs.debug
+            resValue "string", "CodePushDeploymentKey", '"EBgzhCX5Zd-MUsItSF1W8PlGk9n8ZJ5_CQ2aj"'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "devsupport.pro"
+        }
+        releaseStaging {
+            debuggable false
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            shrinkResources enableProguardInReleaseBuilds
+            resValue "string", "CodePushDeploymentKey", '"ltvuwDU5ls3xXiYHVHlnr-1V5dc7S4LHN2dHF"'
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            matchingFallbacks = ['release', 'debug']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            // see https://facebook.github.io/react-native/docs/signed-apk-android.
+            debuggable false
+            signingConfig signingConfigs.release
+            shrinkResources enableProguardInReleaseBuilds
             minifyEnabled enableProguardInReleaseBuilds
+            resValue "string", "CodePushDeploymentKey", '"YJF17LcV8qUJxV2oLfxFVu_j7b0lJAK-osfPK'
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
@@ -254,6 +294,7 @@ dependencies {
 
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(':react-native-vector-icons')
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
