@@ -4,7 +4,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { loginStyles } from '../../styles';
 import { Button, Icon, Input, Layout } from '@ui-kitten/components';
-import { COLORS } from '../../constants';
+import { COLORS, moderateScale } from '../../constants';
 import { Loader, ThemeProvider, WrapperContainer } from '../../components';
 
 
@@ -19,7 +19,6 @@ const SignupScreen = ({ navigation }: any) => {
     let { box1, text, img, box2 } = loginStyles || {};
 
     const [form, setForm] = useState<IUser>({ Email: '', Password: '', Name: '' });
-    const [coordinates, setCoordibates] = useState<any>({ Latitude: null, Longitude: null })
     const [hidePassword, togglePassword] = useState<boolean>(true);
     const [loading, setLoading] = useState(false);
 
@@ -40,9 +39,6 @@ const SignupScreen = ({ navigation }: any) => {
                 email: result.user.email,
                 uid: result.user.uid,
                 password: password,
-                coordinates: {
-                    latitude: coordinates?.Latitude, longitude: coordinates?.Longitude
-                },
                 status: "online"
             })
         } catch (error: any) {
@@ -71,14 +67,14 @@ const SignupScreen = ({ navigation }: any) => {
                     children={
                         <KeyboardAvoidingView behavior={"position"}>
                             <Layout style={box1}>
-                                <Text style={text}>Welcome to SenseHawk</Text>
+                                <Text style={text}>Welcome to Knock!</Text>
                                 <Image style={img} source={require('../../assets/images/logo.webp')} />
                             </Layout>
                             <Layout style={box2}>
                                 {Object.keys(form)?.map((item: any, index: number) => (
                                     <Input
                                         key={index}
-                                        style={{ marginVertical: 12 }}
+                                        style={{ marginVertical: 12, borderRadius: moderateScale(16) }}
                                         autoCapitalize={'none'}
                                         testID={item}
                                         placeholder={item}
@@ -94,23 +90,10 @@ const SignupScreen = ({ navigation }: any) => {
                                         secureTextEntry={(item == 'Password') && hidePassword}
                                     />
                                 ))}
-                                {Object.keys(coordinates)?.map((item: any, index: number) => (
-                                    <Input
-                                        key={index}
-                                        style={{ marginVertical: 12 }}
-                                        autoCapitalize={'none'}
-                                        testID={item}
-                                        placeholder={item}
-                                        value={(coordinates?.item)}
-                                        keyboardType={'numeric'}
-                                        onChangeText={(nextValue: any) => {
-                                            setCoordibates({ ...coordinates, [item]: parseFloat(nextValue) });
-                                        }}
-                                    />
-                                ))}
+                               
                                 <Button
-                                    disabled={!(email && password && name && coordinates?.Latitude && coordinates?.Longitude)}
-                                    style={{ top: '5%' }}
+                                    disabled={!(email && password && name)}
+                                    style={{ top: '5%', borderRadius: moderateScale(16) }}
                                     appearance={'filled'}
                                     onPress={userSignup}>
                                     SignUp

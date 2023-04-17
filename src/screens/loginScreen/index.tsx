@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 import { Image, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Button, Icon, Input, Layout, Text } from '@ui-kitten/components';
 import { loginStyles } from "../../styles";
-import { COLORS } from '../../constants';
+import { COLORS, moderateScale } from '../../constants';
 import { ThemeProvider, WrapperContainer } from '../../components';
 import { signIn } from '../../utils';
+import navigationString from '../../utils/navigationString';
 
 interface IUser {
     [x: string]: string | undefined;
@@ -29,7 +30,7 @@ const LoginScreen = ({ navigation }: any) => {
                     children={
                         <KeyboardAvoidingView behavior={"position"}>
                             <Layout style={box1}>
-                                <Text style={text}>Welcome to SenseHawk</Text>
+                                <Text style={text}>Welcome to Knock!</Text>
                                 <Image style={img} source={require('../../assets/images/logo.webp')} />
                             </Layout>
                             <Layout style={box2}>
@@ -38,6 +39,7 @@ const LoginScreen = ({ navigation }: any) => {
                                         key={index}
                                         autoCapitalize={'none'}
                                         testID={item}
+                                        style = {{ borderRadius: moderateScale(16) }}
                                         placeholder={item}
                                         value={form?.item}
                                         onChangeText={(nextValue: any) => {
@@ -54,12 +56,13 @@ const LoginScreen = ({ navigation }: any) => {
                                 <Button
                                     disabled={!(form?.Email && form?.Password)}
                                     appearance={'filled'}
+                                    style = {{ borderRadius: moderateScale(16) }}
                                     onPress={() => signIn(form, setLoading)}>
                                     Login
                                 </Button>
-                                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                                <TouchableOpacity onPress={() => navigation.navigate(navigationString.SIGNUP)}>
                                     <Text style={{ textAlign: "center" }}>Dont have an account ?
-                                        <Text style={{ textAlign: "center", color : COLORS.darkBlue }}>{" "}SignUp</Text>
+                                        <Text style={{ textAlign: "center", color : COLORS.darkGreen }}>{" "}SignUp</Text>
                                     </Text>
                                 </TouchableOpacity>
                             </Layout>
