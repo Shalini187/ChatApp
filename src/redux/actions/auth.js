@@ -28,7 +28,7 @@ export const logoutHandler = async () => {
     type: types.CLEAR_REDUX_STATE,
   });
   removeItem("UserData");
-  auth().signOut().then(() => {
+  auth()?.signOut()?.then(() => {
     console.log('--------------------------------')
     console.log('sign out');
     console.log('--------------------------------')
