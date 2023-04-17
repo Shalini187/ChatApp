@@ -33,7 +33,7 @@ const SignupScreen = ({ navigation }: any) => {
     const userSignup = async () => {
         setLoading(true);
         try {
-            const result = await auth().createUserWithEmailAndPassword(email, password)
+            const result = await auth().createUserWithEmailAndPassword(email, password);
             firestore().collection('users').doc(result.user.uid).set({
                 name: name,
                 email: result.user.email,

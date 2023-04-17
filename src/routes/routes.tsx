@@ -17,7 +17,7 @@ export default function Routes() {
         <NavigationContainer
             ref={navigationRef}
         >
-            {userData?.idToken ? (
+            {userData?.uid ? (
                <Tabs />
             ) : (
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
