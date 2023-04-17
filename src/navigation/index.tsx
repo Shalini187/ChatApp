@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ChatScreen } from "../screens";
 import { COLORS } from "../constants"
 import { ThemeProvider } from "../components";
+import navigationString from "../utils/navigationString";
 
 const Tab = createBottomTabNavigator()
 
@@ -14,7 +15,7 @@ const Tabs = () => {
         <ThemeProvider
             children={
                 <Tab.Navigator
-                    initialRouteName="ChatScreen"
+                    initialRouteName={navigationString.CHATSCREEN}
                     screenOptions={{
                         headerShown: false,
                         tabBarActiveTintColor: COLORS.blue,
@@ -22,7 +23,7 @@ const Tabs = () => {
                     }}
                 >
                     <Tab.Screen
-                        name="ChatScreen"
+                        name={navigationString.CHATSCREEN}
                         component={ChatScreen}
                         options={{
                             tabBarLabel: 'Chats',

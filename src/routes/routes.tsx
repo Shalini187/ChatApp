@@ -5,8 +5,9 @@ import { useSelector } from "react-redux";
 
 import navigationStrings from "../utils/navigationString";
 import { navigationRef } from "./navigationService";
-import { LoginScreen, SignupScreen } from "../screens";
-import Tabs from "../navigation";
+import { LoginScreen, SignupScreen } from "../screens";;
+import MainTabScreen from "../navigation";
+import MainStack from "../routes/navigation";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +19,18 @@ export default function Routes() {
             ref={navigationRef}
         >
             {userData?.uid ? (
-               <Tabs />
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name={navigationStrings.HOMETABMAIN}
+                        component={MainTabScreen}
+                        options={{
+                            title: "",
+                            headerShown: false,
+                            headerTintColor: "#ffffff",
+                        }}
+                    />
+                    {MainStack()}
+                </Stack.Navigator>
             ) : (
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                     <Stack.Screen

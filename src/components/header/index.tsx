@@ -24,8 +24,8 @@ const HeaderBar = (props: IHeader) => {
                     isBack ?
                         <TouchableOpacity onPress={onTap}>
                             <Icon
-                                pack={'material'}
-                                name={'arrow-back-ios'}
+                                pack={'feather'}
+                                name={'arrow-left'}
                                 color={COLORS.black}
                                 style={{ height: 24, width: 24 }}
                             />

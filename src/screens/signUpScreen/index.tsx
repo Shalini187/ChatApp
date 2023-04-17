@@ -6,6 +6,7 @@ import { loginStyles } from '../../styles';
 import { Button, Icon, Input, Layout } from '@ui-kitten/components';
 import { COLORS, moderateScale } from '../../constants';
 import { Loader, ThemeProvider, WrapperContainer } from '../../components';
+import { onLoginSuccess } from '../../redux/actions/auth';
 
 
 interface IUser {
@@ -34,13 +35,16 @@ const SignupScreen = ({ navigation }: any) => {
         setLoading(true);
         try {
             const result = await auth().createUserWithEmailAndPassword(email, password);
-            firestore().collection('users').doc(result.user.uid).set({
+            console.log("result.user.uid", result.user.uid);
+            let payload = {
                 name: name,
                 email: result.user.email,
                 uid: result.user.uid,
                 password: password,
                 status: "online"
-            })
+            }
+            onLoginSuccess(payload);
+            firestore().collection('users').doc(result.user.uid).set(payload);
         } catch (error: any) {
             if (error.code === 'auth/email-already-in-use') {
                 Alert.alert('The email address is already in use!');
@@ -64,7 +68,7 @@ const SignupScreen = ({ navigation }: any) => {
             children={
                 <WrapperContainer
                     bodyColor={COLORS.white}
-                    isLoading = {loading}
+                    isLoading={loading}
                     children={
                         <Layout style={{ flex: 1, top: "8%" }}>
                             <KeyboardAvoidingView behavior={"position"}>

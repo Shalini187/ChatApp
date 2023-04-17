@@ -6,6 +6,7 @@ import { COLORS } from "../../constants";
 import { getLoginUsers, getUsers, signOut, titleWords } from "../../utils";
 import { chatStyles } from '../../styles';
 import { useSelector } from "react-redux";
+import navigationString from "../../utils/navigationString";
 
 let { text, mycard, subText } = chatStyles || {};
 
@@ -27,16 +28,11 @@ const ChatScreen = ({ navigation, route }: any) => {
         setRefresh(false);
     }
 
-    if (loading) {
-        return (
-            <Loader />
-        )
-    }
     const RenderCard = ({ item, index }: any) => {
         let { name, uid, status } = item || {};
 
         return (
-            <TouchableOpacity key={index} onPress={() => navigation.navigate('ChatSectionScreen', {
+            <TouchableOpacity key={index} onPress={() => navigation.navigate(navigationString.DETAILSCREEN, {
                 name, uid,
                 status: typeof (status) == "string" ? status : status.toDate().toString()
             })}>
@@ -59,14 +55,15 @@ const ChatScreen = ({ navigation, route }: any) => {
             children={
                 <WrapperContainer
                     bodyColor={COLORS.white}
+                    isLoading = {loading}
                     children={
                         <>
                             <Layout style={{ flex: 1 }}>
                                 <HeaderBar isBack={false} headerText={loginUser?.[0]?.name} extraProps={{ status: loginUser?.[0]?.status }} rightProps={() => (
-                                    <TouchableOpacity onPress={() => signOut(user, setLoading)}>
+                                    <TouchableOpacity onPress={() => signOut(userData, setLoading)}>
                                         <Icon
-                                            pack={'material'}
-                                            name={'logout'}
+                                            pack={'feather'}
+                                            name={'log-out'}
                                             color={COLORS.black}
                                             style={{ height: 24, width: 24 }}
                                         />

@@ -27,10 +27,13 @@ export let signIn = async (form: {}, setLoading: Function) => {
     setLoading(true);
     try {
         let userCredentials = await auth().signInWithEmailAndPassword(email, password);
-        if (userCredentials) {
-            setTimeout(() => setLoading(false), 2000);
-            onLoginSuccess(userCredentials);
-        };
+        auth().onAuthStateChanged((user) => {
+            if (user) {
+                firestore().collection('users').doc(user?.uid).update({ status: "online" });
+               onLoginSuccess(user);
+            }
+        })
+        setLoading(false)
     } catch (e: any) {
         Alert.alert('The email address or password is invalid!');
         setLoading(false);
@@ -47,8 +50,11 @@ export let signOut = (user: any, setLoading: Function) => {
                 onPress: () => {
                     setLoading(true);
                     firestore().collection('users').doc(user?.uid).update({ status: "offline" });
-                    logoutHandler();
-                    setLoading(false);
+                   
+                    setTimeout(() => {
+                        logoutHandler();
+                        setLoading(false);
+                    }, 1000);
                 },
                 style: 'destructive'
             },

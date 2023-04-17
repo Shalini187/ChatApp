@@ -3,5 +3,6 @@ export default {
     SIGNUP: "SignUpScreen",
 
     DETAILSCREEN: "DetailScreen",
-    CHATSCREEN: "ChatScreen"
+    CHATSCREEN: "ChatScreen",
+    HOMETABMAIN: "HomeTabMain"
 };

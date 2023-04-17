@@ -18,9 +18,10 @@ const options: any = {
     },
 };
 
+
 export default function MainStack() {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={navigationStrings.CHATSCREEN}>
+        <>
             <Stack.Screen
                 name={navigationStrings.CHATSCREEN}
                 component={Screens.ChatScreen}
@@ -37,6 +38,6 @@ export default function MainStack() {
                     ...options,
                 }}
             />
-        </Stack.Navigator>
+        </>
     );
 }
