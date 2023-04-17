@@ -67,7 +67,7 @@ const LoginScreen = ({ navigation }: any) => {
                                         status={"primary"}
                                         style={{ borderRadius: moderateScale(16) }}
                                         onPress={() => signIn(form, setLoading)}>
-                                        {(eva) => <Text {...eva} style={{ color: !(form?.Email && form?.Password) ? COLORS.lightGray : fontColor, fontFamily: fontFamily.proximaSemiBold }}>{"LOGIN"}</Text>}
+                                        {(eva) => <Text {...eva} style={{ color: !(form?.Email && form?.Password) ? COLORS.lightGray4 : fontColor, fontFamily: fontFamily.proximaSemiBold }}>{"LOGIN"}</Text>}
                                     </Button>
                                     <TouchableOpacity onPress={() => navigation.navigate(navigationString.SIGNUP)}>
                                         <Text style={{ textAlign: "center", fontFamily: fontFamily.proximaMedium }}>Dont have an account ?

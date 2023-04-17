@@ -78,7 +78,7 @@ const SignupScreen = ({ navigation }: any) => {
                         <Layout style={{ flex: 1, top: "8%" }}>
                             <KeyboardAvoidingView behavior={"position"}>
                                 <Layout style={box1}>
-                                    <Text style={{ ...text, fontFamily: fontFamily.proximaExtraBold }}>Welcome to Knock!</Text>
+                                    <Text style={{ ...text, fontFamily: fontFamily.proximaExtraBold, color: (theme == "dark") ? COLORS.white : COLORS.black }}>Welcome to Knock!</Text>
                                     <Image resizeMode={"cover"} style={img} source={require('../../assets/images/logo.webp')} />
                                 </Layout>
                                 <Layout style={box2}>
@@ -107,10 +107,10 @@ const SignupScreen = ({ navigation }: any) => {
                                         style={{ top: '5%', borderRadius: moderateScale(16) }}
                                         appearance={'filled'}
                                         onPress={userSignup}>
-                                        {(eva) => <Text {...eva} style={{ color: !(email && password && name) ? COLORS.lightGray : fontColor, fontFamily: fontFamily.proximaSemiBold }}>{"SIGNUP"}</Text>}
+                                        {(eva) => <Text {...eva} style={{ color: !(email && password && name) ? COLORS.lightGray4 : fontColor, fontFamily: fontFamily.proximaSemiBold }}>{"SIGNUP"}</Text>}
                                     </Button>
                                     <TouchableOpacity style={{ top: '18%' }} onPress={() => navigation.goBack()}>
-                                        <Text style={{ textAlign: "center", fontFamily: fontFamily.proximaMedium }}>Already have an account ?
+                                        <Text style={{ textAlign: "center", fontFamily: fontFamily.proximaMedium, color: (theme == "dark") ? COLORS.white : COLORS.black }}>Already have an account ?
                                             <Text style={{ textAlign: "center", color: COLORS.darkGreen, fontFamily: fontFamily.helveticaMedium }}>{" "}Login
                                             </Text>
                                         </Text>
