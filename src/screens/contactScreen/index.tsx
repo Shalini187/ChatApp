@@ -11,7 +11,7 @@ import firestore from '@react-native-firebase/firestore';
 let { text, mycard, subText } = chatStyles || {};
 
 const ContactScreen = ({ navigation, route }: any) => {
-    const { userData } = useSelector((state: any) => state.auth);
+    const { userData, theme } = useSelector((state: any) => state.auth);
 
     const [users, setUsers] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -75,6 +75,7 @@ const ContactScreen = ({ navigation, route }: any) => {
 
     const RenderCard = ({ item, index }: any) => {
         let { name, uid, status } = item || {};
+        const color = (theme == "dark") ? COLORS.white : COLORS.black;
 
         return (
             <TouchableOpacity key={index} onPress={() => onClick(uid)}>
@@ -84,13 +85,13 @@ const ContactScreen = ({ navigation, route }: any) => {
                             <Icon
                                 pack={'feather'}
                                 name={'check-square'}
-                                style={{ height: 24, width: 24, tintColor: COLORS.black, alignSelf: "center", marginRight: moderateScale(16), marginTop: moderateScale(8) }}
+                                style={{ height: 24, width: 24, tintColor: color, alignSelf: "center", marginRight: moderateScale(16), marginTop: moderateScale(8) }}
                             />
                             :
                             <Icon
                                 pack={'feather'}
                                 name={'square'}
-                                style={{ height: 24, width: 24, tintColor: COLORS.black, alignSelf: "center", marginRight: moderateScale(16), marginTop: moderateScale(8) }}
+                                style={{ height: 24, width: 24, tintColor: color, alignSelf: "center", marginRight: moderateScale(16), marginTop: moderateScale(8) }}
                             />
                     }
 
@@ -116,14 +117,14 @@ const ContactScreen = ({ navigation, route }: any) => {
                         <>
                             <Layout style={{ flex: 1 }}>
                                 <HeaderBar extraProps={{ status: loginUser?.[0]?.status }}
-                                onTap={() => navigation.goBack()}
+                                    onTap={() => navigation.goBack()}
                                     leftString={"Contacts"}
                                     rightProps={() => (
                                         <TouchableOpacity onPress={() => createGroup()}>
                                             <Icon
                                                 pack={'feather'}
                                                 name={'user-plus'}
-                                                style={{ height: 24, width: 24, tintColor: COLORS.black }}
+                                                style={{ height: 24, width: 24, tintColor: (theme == "dark") ? COLORS.white : COLORS.black }}
                                             />
                                         </TouchableOpacity>
                                     )} />

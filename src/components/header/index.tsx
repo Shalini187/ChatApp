@@ -54,7 +54,7 @@ const HeaderBar = (props: IHeader) => {
                                         <Icon
                                             pack={'feather'}
                                             name={'arrow-left'}
-                                            style={{ height: 24, width: 24, tintColor: COLORS.black }}
+                                            style={{ height: 24, width: 24, tintColor: (theme == "dark") ? COLORS.white: COLORS.black }}
                                         />
                                     </TouchableOpacity>
                                     <Text style={{ fontSize: textScale(20), fontFamily: fontFamily.proximaBold, textTransform: "capitalize", marginLeft: moderateScale(8) }}>{leftString}</Text>
