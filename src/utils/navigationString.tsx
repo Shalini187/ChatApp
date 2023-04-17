@@ -4,5 +4,6 @@ export default {
 
     DETAILSCREEN: "DetailScreen",
     CHATSCREEN: "ChatScreen",
-    HOMETABMAIN: "HomeTabMain"
+    HOMETABMAIN: "HomeTabMain",
+    CONTACTSCREEN: "ContactScreen"
 };

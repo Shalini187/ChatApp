@@ -10,7 +10,7 @@ import navigationString from "../../utils/navigationString";
 
 let { text, mycard, subText } = chatStyles || {};
 
-const ChatScreen = ({ navigation, route }: any) => {
+const ContactScreen = ({ navigation, route }: any) => {
     const { userData } = useSelector((state: any) => state.auth);
 
     const [users, setUsers] = useState<any>(null);
@@ -98,4 +98,4 @@ const ChatScreen = ({ navigation, route }: any) => {
     )
 }
 
-export default ChatScreen;
+export default ContactScreen;

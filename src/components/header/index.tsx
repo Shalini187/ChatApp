@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon, Layout } from '@ui-kitten/components';
 import { TouchableOpacity, View, Text } from 'react-native';
-import { COLORS } from '../../constants';
+import { COLORS, moderateScale, textScale } from '../../constants';
 import { titleWords } from '../../utils';
 
 interface IHeader {
@@ -18,7 +18,7 @@ const HeaderBar = (props: IHeader) => {
     const { status } = extraProps || {};
 
     return (
-        <Layout style={{ flex: 1 }}>
+        <Layout style={{ flex: 1 }} >
             <Layout style={{ margin: 16, flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 0 }}>
                 {
                     isBack ?
@@ -26,30 +26,25 @@ const HeaderBar = (props: IHeader) => {
                             <Icon
                                 pack={'feather'}
                                 name={'arrow-left'}
-                                color={COLORS.black}
-                                style={{ height: 24, width: 24 }}
+                                style={{ height: 24, width: 24, tintColor: COLORS.black }}
                             />
                         </TouchableOpacity>
                         :
-                        <View />
+                        headerText ?
+                            <TouchableOpacity onPress={onTitleCallback} style={{ flexDirection: 'row' }}>
+                                <Layout style={{ height: 50, width: 50, backgroundColor: COLORS.blue, borderRadius: 100, marginRight: 16 }}>
+                                    <Text style={{ fontWeight: '900', textTransform: "capitalize", color: COLORS.white, fontSize: textScale(12), alignSelf: "center", paddingTop: moderateScale(16) }}>{titleWords(headerText)}</Text>
+                                </Layout>
+                                <Layout>
+                                    <Text style={{ fontSize: textScale(18), color: COLORS.black, fontWeight: '900', textTransform: "capitalize" }}>{headerText}</Text>
+                                    <Text style={{ fontSize: textScale(12), color: (status == 'online') ? COLORS.darkGreen : COLORS.red, fontWeight: '900' }}>{status}</Text>
+                                </Layout>
+                            </TouchableOpacity>
+                            :
+                            <></>
                 }
-                {rightProps ? rightProps() : <View />}
+                {rightProps?.() ?? <View />}
             </Layout>
-            {
-                headerText ?
-                    <TouchableOpacity onPress={onTitleCallback} style={{ flexDirection: 'row' }}>
-                        <Layout style={{ height: 70, width: 70, backgroundColor: COLORS.blue, borderRadius: 100, marginHorizontal: 16 }}>
-                            <Text style={{ fontWeight: '900', color: COLORS.white, fontSize: 18, alignSelf: "center", flex: 1, justifyContent: "center", paddingVertical: 24 }}>{titleWords(headerText)}</Text>
-                        </Layout>
-                        <Layout>
-                            <Text style={{ fontSize: 24, color: COLORS.black, fontWeight: '900' }}>{headerText}</Text>
-                            <Text style={{ fontSize: 12, color: (status == 'online') ? COLORS.darkGreen : COLORS.red, fontWeight: '900' }}>{status}</Text>
-                        </Layout>
-                    </TouchableOpacity>
-                    :
-                    <></>
-            }
-            <Layout style={{ borderColor: COLORS.lightGray3, borderWidth: 0.75, marginTop: 16 }} />
         </Layout>
     )
 }
