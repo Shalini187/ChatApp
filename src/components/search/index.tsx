@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, KeyboardAvoidingView } from "react-native";
-import { Icon } from '@ui-kitten/components';
+import { Icon, Input, Layout } from '@ui-kitten/components';
 
 import { searchStyle } from '../../styles';
 import { COLORS } from "../../constants";
@@ -17,7 +17,7 @@ function SystemSearch(props: ISearch) {
     return (
         <KeyboardAvoidingView behavior={'padding'}
             enabled style={{ ...centeredView, backgroundColor: COLORS.white }}>
-            <TextInput
+            <Input
                 value={value}
                 style={{ ...input, borderColor: COLORS.black, color: COLORS.black }}
                 keyboardType={'web-search'}
@@ -26,18 +26,18 @@ function SystemSearch(props: ISearch) {
                 placeholder={'Search here...'}
                 onChangeText={(text: string) => setValue(text)}
             />
-            <View style={buttons}>
-                <View style={buttonSearch}>
+            <Layout style={buttons}>
+                <Layout style={buttonSearch}>
                     <Icon pack = {'eva'} name={'search'} color={COLORS.black} size={34} onPress={() => { }} />
-                </View>
+                </Layout>
                 {
                     value ?
-                        <View style={buttonClose}>
+                        <Layout style={buttonClose}>
                             <Icon name={'close'} color={COLORS.black} size={28} onPress={() => setValue('')} />
-                        </View>
+                        </Layout>
                         : <></>
                 }
-            </View>
+            </Layout>
         </KeyboardAvoidingView>
     );
 };

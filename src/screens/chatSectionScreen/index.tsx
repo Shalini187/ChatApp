@@ -1,19 +1,21 @@
-import { Icon } from "@ui-kitten/components";
-import React, { useContext, useEffect, useState } from "react";
+import { Icon, Layout } from "@ui-kitten/components";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat'
-import { AuthContext, HeaderBar, ThemeProvider, WrapperContainer } from "../../components";
+import { HeaderBar, ThemeProvider, WrapperContainer } from "../../components";
 import { COLORS } from "../../constants";
 import { docId, getMessages, onSend } from "../../utils";
+import { useSelector } from "react-redux";
 
 
 const ChatSectionScreen = ({ navigation, route }: any) => {
-    const { user }: any = useContext(AuthContext);
+    const { userData} = useSelector((state: any) => state.auth);
+    
     const [messages, setMessages] = useState([]);
     const { uid, name, status } = route?.params || {};
 
     useEffect(() => {
-        const docid = docId(uid, user);
+        const docid = docId(uid, userData);
         getMessages(setMessages, docid);
     }, []);
 
@@ -23,11 +25,11 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
             children={
                 <WrapperContainer
                     children={
-                        <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+                        <Layout style={{ flex: 1, backgroundColor: COLORS.white }}>
                             <HeaderBar isBack={false} headerText={name} extraProps={{ status }} onTitleCallback={() => navigation.goBack()} />
                             <GiftedChat
                                 messages={messages}
-                                onSend={text => onSend(text, setMessages, uid, user)}
+                                onSend={text => onSend(text, setMessages, uid, userData)}
                                 user={{
                                     _id: uid,
                                 }}
@@ -65,7 +67,7 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
                                 }}
 
                             />
-                        </View>
+                        </Layout>
                     }
                 />
             }

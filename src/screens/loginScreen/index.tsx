@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { View, Image, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
-import { Button, Icon, Input, Text } from '@ui-kitten/components';
+import { Image, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
+import { Button, Icon, Input, Layout, Text } from '@ui-kitten/components';
 import { loginStyles } from "../../styles";
 import { COLORS } from '../../constants';
 import { Loader, ThemeProvider, WrapperContainer } from '../../components';
@@ -33,11 +33,11 @@ const LoginScreen = ({ navigation }: any) => {
                     bodyColor={COLORS.white}
                     children={
                         <KeyboardAvoidingView behavior={"position"}>
-                            <View style={box1}>
+                            <Layout style={box1}>
                                 <Text style={text}>Welcome to SenseHawk</Text>
                                 <Image style={img} source={require('../../assets/images/sensehawk.webp')} />
-                            </View>
-                            <View style={box2}>
+                            </Layout>
+                            <Layout style={box2}>
                                 {Object.keys(form)?.map((item: any, index: number) => (
                                     <Input
                                         key={index}
@@ -57,15 +57,17 @@ const LoginScreen = ({ navigation }: any) => {
                                     />
                                 ))}
                                 <Button
-                                    disabled = {!(form?.Email && form?.Password)}
+                                    disabled={!(form?.Email && form?.Password)}
                                     appearance={'filled'}
                                     onPress={() => signIn(form, setLoading)}>
                                     Login
                                 </Button>
                                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                                    <Text style={{ textAlign: "center" }}>Dont have an account ?</Text>
+                                    <Text style={{ textAlign: "center" }}>Dont have an account ?
+                                        <Text style={{ textAlign: "center" }}>{" "}SignUp</Text>
+                                    </Text>
                                 </TouchableOpacity>
-                            </View>
+                            </Layout>
                         </KeyboardAvoidingView>
                     }
                 />

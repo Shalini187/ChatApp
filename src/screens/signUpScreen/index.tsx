@@ -3,7 +3,7 @@ import { View, Text, Image, KeyboardAvoidingView, TouchableOpacity, Alert } from
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { loginStyles } from '../../styles';
-import { Button, Icon, Input } from '@ui-kitten/components';
+import { Button, Icon, Input, Layout } from '@ui-kitten/components';
 import { COLORS } from '../../constants';
 import { Loader, ThemeProvider, WrapperContainer } from '../../components';
 
@@ -70,11 +70,11 @@ const SignupScreen = ({ navigation }: any) => {
                     bodyColor={COLORS.white}
                     children={
                         <KeyboardAvoidingView behavior={"position"}>
-                            <View style={box1}>
+                            <Layout style={box1}>
                                 <Text style={text}>Welcome to SenseHawk</Text>
                                 <Image style={img} source={require('../../assets/images/sensehawk.webp')} />
-                            </View>
-                            <View style={box2}>
+                            </Layout>
+                            <Layout style={box2}>
                                 {Object.keys(form)?.map((item: any, index: number) => (
                                     <Input
                                         key={index}
@@ -118,7 +118,7 @@ const SignupScreen = ({ navigation }: any) => {
                                 <TouchableOpacity style={{ top: '18%' }} onPress={() => navigation.goBack()}>
                                     <Text style={{ textAlign: "center" }}>Already have an account ?</Text>
                                 </TouchableOpacity>
-                            </View>
+                            </Layout>
                         </KeyboardAvoidingView>
                     }
                 />

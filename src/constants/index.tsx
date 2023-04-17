@@ -1,3 +1,3 @@
-import theme, { COLORS, textScale, moderateScale, moderateScaleVertical, width, height } from "./theme";
+import theme, { COLORS, textScale, moderateScale, moderateScaleVertical, width, height, fontFamily } from "./theme";
 
-export { theme, COLORS, textScale, moderateScale, moderateScaleVertical, width, height };
+export { theme, COLORS, textScale, moderateScale, moderateScaleVertical, width, height, fontFamily };

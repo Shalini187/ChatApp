@@ -1,4 +1,4 @@
-import { Spinner } from '@ui-kitten/components';
+import { Layout, Spinner } from '@ui-kitten/components';
 import React from 'react';
 import { View, SafeAreaView } from 'react-native';
 import { COLORS } from '../../constants';
@@ -14,13 +14,13 @@ const WrapperContainer = (props: IWrap) => {
     let { children, bodyColor = COLORS.backGroundBlack } = props || {};
 
     return (
-        <SafeAreaView
+        <Layout
             style={{
                 flex: 1,
                 backgroundColor: bodyColor,
             }}>
-            <View style={{ backgroundColor: bodyColor, flex: 1 }}>{children}</View>
-        </SafeAreaView>
+            <Layout style={{ backgroundColor: bodyColor, flex: 1 }}>{children}</Layout>
+        </Layout>
     );
 };
 

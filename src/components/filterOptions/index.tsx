@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "@ui-kitten/components";
+import { Layout, Text } from "@ui-kitten/components";
 import { TouchableOpacity, View } from "react-native";
 import { flexStyle } from "../../styles";
 import { COLORS } from "../../constants";
@@ -41,18 +41,18 @@ const FilterOptions = (props: IFilter) => {
 
 
     return (
-        <View style={{ flex: 1, alignSelf: 'flex-end', top: '12%', position: 'absolute' }}>
+        <Layout style={{ flex: 1, alignSelf: 'flex-end', top: '12%', position: 'absolute' }}>
             {
                 filterArray?.map((ef: any, index: number) => {
                     let { name, style, onPress } = ef || {};
                     return (
                         <TouchableOpacity onPress={onPress} key={index} style={{ ...style, backgroundColor: (filter == name) ? COLORS.blue : COLORS.lightGray }}>
-                            <View><Text style={{ fontSize: 12, padding: 8, color: (filter == name) ? COLORS.white : COLORS.black, fontWeight: '900' }}>{name}</Text></View>
+                            <Text style={{ fontSize: 12, padding: 8, color: (filter == name) ? COLORS.white : COLORS.black, fontWeight: '900' }}>{name}</Text>
                         </TouchableOpacity>
                     )
                 })
             }
-        </View>
+        </Layout>
     )
 }
 

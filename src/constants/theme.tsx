@@ -2,6 +2,20 @@ import { Dimensions, StatusBar, Platform } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
+export const fontFamily: any = {
+    proximaBold: "Proxima-Bold",
+    proximaExtraBold: "Proxima-ExtraBold",
+    proximaLight: "Proxima-Light",
+    proximaSemiBold: "Proxima-SemiBold",
+    proximaRegular: "Proxima-Regular",
+    proximaMedium: "Proxima-Medium",
+    helveticaBold: "HelveticaNeue-Bold",
+    helveticaExtaBold: "HelveticaNeue-ExtraBold",
+    helveticaMedium: "HelveticaNeue-Medium",
+    helveticaRegular: "HelveticaNeue-Regular",
+    helveticaLight: "HelveticaNeue-Light",
+};
+
 export const COLORS: any = {
     darkGreen: "#229879",
     darkLime: "#1A8871",
