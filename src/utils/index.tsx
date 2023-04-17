@@ -33,6 +33,7 @@ export let signIn = async (form: {}, setLoading: Function) => {
         };
     } catch (e: any) {
         Alert.alert('The email address or password is invalid!');
+        setLoading(false);
     }
 }
 
@@ -44,8 +45,10 @@ export let signOut = (user: any, setLoading: Function) => {
             {
                 text: "YES",
                 onPress: () => {
+                    setLoading(true);
                     firestore().collection('users').doc(user?.uid).update({ status: "offline" });
                     logoutHandler();
+                    setLoading(false);
                 },
                 style: 'destructive'
             },

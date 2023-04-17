@@ -65,44 +65,45 @@ const SignupScreen = ({ navigation }: any) => {
                 <WrapperContainer
                     bodyColor={COLORS.white}
                     children={
-                        <KeyboardAvoidingView behavior={"position"}>
-                            <Layout style={box1}>
-                                <Text style={text}>Welcome to Knock!</Text>
-                                <Image style={img} source={require('../../assets/images/logo.webp')} />
-                            </Layout>
-                            <Layout style={box2}>
-                                {Object.keys(form)?.map((item: any, index: number) => (
-                                    <Input
-                                        key={index}
-                                        style={{ marginVertical: 12, borderRadius: moderateScale(16) }}
-                                        autoCapitalize={'none'}
-                                        testID={item}
-                                        placeholder={item}
-                                        value={form?.item}
-                                        onChangeText={(nextValue: any) => {
-                                            setForm({ ...form, [item]: nextValue });
-                                        }}
-                                        accessoryRight={(props: any) => {
-                                            return (
-                                                (item == 'Password') ? <Icon name={!hidePassword ? 'eye-off' : 'eye'} {...props} color={COLORS.black} size={24} pack={'eva'} onPress={() => togglePassword(!hidePassword)} /> : <></>
-                                            )
-                                        }}
-                                        secureTextEntry={(item == 'Password') && hidePassword}
-                                    />
-                                ))}
-                               
-                                <Button
-                                    disabled={!(email && password && name)}
-                                    style={{ top: '5%', borderRadius: moderateScale(16) }}
-                                    appearance={'filled'}
-                                    onPress={userSignup}>
-                                    SignUp
-                                </Button>
-                                <TouchableOpacity style={{ top: '18%' }} onPress={() => navigation.goBack()}>
-                                    <Text style={{ textAlign: "center" }}>Already have an account ?</Text>
-                                </TouchableOpacity>
-                            </Layout>
-                        </KeyboardAvoidingView>
+                        <Layout style={{ flex: 1, top: "8%" }}>
+                            <KeyboardAvoidingView behavior={"position"}>
+                                <Layout style={box1}>
+                                    <Text style={text}>Welcome to Knock!</Text>
+                                    <Image style={img} source={require('../../assets/images/logo.webp')} />
+                                </Layout>
+                                <Layout style={box2}>
+                                    {Object.keys(form)?.map((item: any, index: number) => (
+                                        <Input
+                                            key={index}
+                                            style={{ marginVertical: 12, borderRadius: moderateScale(16) }}
+                                            autoCapitalize={'none'}
+                                            testID={item}
+                                            placeholder={item}
+                                            value={form?.item}
+                                            onChangeText={(nextValue: any) => {
+                                                setForm({ ...form, [item]: nextValue });
+                                            }}
+                                            accessoryRight={(props: any) => {
+                                                return (
+                                                    (item == 'Password') ? <Icon name={!hidePassword ? 'eye-off' : 'eye'} {...props} color={COLORS.black} size={24} pack={'eva'} onPress={() => togglePassword(!hidePassword)} /> : <></>
+                                                )
+                                            }}
+                                            secureTextEntry={(item == 'Password') && hidePassword}
+                                        />
+                                    ))}
+                                    <Button
+                                        disabled={!(email && password && name)}
+                                        style={{ top: '5%', borderRadius: moderateScale(16) }}
+                                        appearance={'filled'}
+                                        onPress={userSignup}>
+                                        SignUp
+                                    </Button>
+                                    <TouchableOpacity style={{ top: '18%' }} onPress={() => navigation.goBack()}>
+                                        <Text style={{ textAlign: "center" }}>Already have an account ?</Text>
+                                    </TouchableOpacity>
+                                </Layout>
+                            </KeyboardAvoidingView>
+                        </Layout>
                     }
                 />
             }

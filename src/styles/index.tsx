@@ -96,6 +96,7 @@ export const loginStyles = StyleSheet.create({
     },
     box1: {
         alignItems: "center",
+        paddingBottom: moderateScaleVertical(16)
     },
     box2: {
         paddingHorizontal: moderateScaleVertical(40),

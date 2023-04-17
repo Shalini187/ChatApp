@@ -28,45 +28,47 @@ const LoginScreen = ({ navigation }: any) => {
                     isLoading={loading}
                     bodyColor={COLORS.white}
                     children={
-                        <KeyboardAvoidingView behavior={"position"}>
-                            <Layout style={box1}>
-                                <Text style={text}>Welcome to Knock!</Text>
-                                <Image style={img} source={require('../../assets/images/logo.webp')} />
-                            </Layout>
-                            <Layout style={box2}>
-                                {Object.keys(form)?.map((item: any, index: number) => (
-                                    <Input
-                                        key={index}
-                                        autoCapitalize={'none'}
-                                        testID={item}
-                                        style = {{ borderRadius: moderateScale(16) }}
-                                        placeholder={item}
-                                        value={form?.item}
-                                        onChangeText={(nextValue: any) => {
-                                            setForm({ ...form, [item]: nextValue });
-                                        }}
-                                        accessoryRight={(props: any) => {
-                                            return (
-                                                (item == 'Password') ? <Icon name={!hidePassword ? 'eye-off' : 'eye'} {...props} color={COLORS.black} size={24} pack={'eva'} onPress={() => togglePassword(!hidePassword)} /> : <></>
-                                            )
-                                        }}
-                                        secureTextEntry={(item == 'Password') && hidePassword}
-                                    />
-                                ))}
-                                <Button
-                                    disabled={!(form?.Email && form?.Password)}
-                                    appearance={'filled'}
-                                    style = {{ borderRadius: moderateScale(16) }}
-                                    onPress={() => signIn(form, setLoading)}>
-                                    Login
-                                </Button>
-                                <TouchableOpacity onPress={() => navigation.navigate(navigationString.SIGNUP)}>
-                                    <Text style={{ textAlign: "center" }}>Dont have an account ?
-                                        <Text style={{ textAlign: "center", color : COLORS.darkGreen }}>{" "}SignUp</Text>
-                                    </Text>
-                                </TouchableOpacity>
-                            </Layout>
-                        </KeyboardAvoidingView>
+                        <Layout style={{ flex: 1, top: "8%" }}>
+                            <KeyboardAvoidingView behavior={"position"}>
+                                <Layout style={box1}>
+                                    <Text style={text}>Welcome to Knock!</Text>
+                                    <Image style={img} source={require('../../assets/images/logo.webp')} />
+                                </Layout>
+                                <Layout style={box2}>
+                                    {Object.keys(form)?.map((item: any, index: number) => (
+                                        <Input
+                                            key={index}
+                                            autoCapitalize={'none'}
+                                            testID={item}
+                                            style={{ borderRadius: moderateScale(16) }}
+                                            placeholder={item}
+                                            value={form?.item}
+                                            onChangeText={(nextValue: any) => {
+                                                setForm({ ...form, [item]: nextValue });
+                                            }}
+                                            accessoryRight={(props: any) => {
+                                                return (
+                                                    (item == 'Password') ? <Icon name={!hidePassword ? 'eye-off' : 'eye'} {...props} color={COLORS.black} size={24} pack={'eva'} onPress={() => togglePassword(!hidePassword)} /> : <></>
+                                                )
+                                            }}
+                                            secureTextEntry={(item == 'Password') && hidePassword}
+                                        />
+                                    ))}
+                                    <Button
+                                        disabled={!(form?.Email && form?.Password)}
+                                        appearance={'filled'}
+                                        style={{ borderRadius: moderateScale(16) }}
+                                        onPress={() => signIn(form, setLoading)}>
+                                        Login
+                                    </Button>
+                                    <TouchableOpacity onPress={() => navigation.navigate(navigationString.SIGNUP)}>
+                                        <Text style={{ textAlign: "center" }}>Dont have an account ?
+                                            <Text style={{ textAlign: "center", color: COLORS.darkGreen }}>{" "}SignUp</Text>
+                                        </Text>
+                                    </TouchableOpacity>
+                                </Layout>
+                            </KeyboardAvoidingView>
+                        </Layout>
                     }
                 />
             }
