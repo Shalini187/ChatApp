@@ -5,7 +5,7 @@ import moment from "moment";
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import { HeaderBar, ThemeProvider, WrapperContainer } from "../../components";
 import { COLORS, fontFamily, hitSlop, moderateScale, textScale } from "../../constants";
-import { docId, getMessages, onSend, titleWords } from "../../utils";
+import { docId, getGroupMessages, getMessages, onSend, onSendGroup, titleWords } from "../../utils";
 import { useSelector } from "react-redux";
 
 
@@ -19,8 +19,12 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
     const { uid, name, status } = route?.params || {};
 
     useEffect(() => {
-        const docid = docId(uid, userData);
-        getMessages(setMessages, docid);
+        if(status){
+            const docid = docId(uid, userData);
+            getMessages(setMessages, docid);
+        }else{
+            getGroupMessages(setMessages, uid)
+        }
     }, []);
 
     return (
@@ -34,9 +38,11 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
                                 <Layout style={{ flex: 5 }}>
                                     <GiftedChat
                                         messages={messages}
-                                        onSend={text => onSend(text, setMessages, uid, userData)}
+                                        onSend={text => {
+                                            !!status ? onSend(text, setMessages, uid, userData) :  onSendGroup(text, setMessages, uid, userData)
+                                        }}
                                         user={{
-                                            _id: uid,
+                                            _id: userData?.uid,
                                         }}
                                         showUserAvatar={false}
                                         showAvatarForEveryMessage={false}

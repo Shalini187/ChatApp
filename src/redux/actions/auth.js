@@ -1,4 +1,5 @@
 import { setItem, removeItem } from "../../cache";
+import { checkTheme } from "../../utils";
 import store from "../store";
 import types from "../types";
 import auth from '@react-native-firebase/auth';
@@ -27,12 +28,14 @@ export const logoutHandler = async () => {
   dispatch({
     type: types.CLEAR_REDUX_STATE,
   });
-  removeItem("UserData");
-  auth()?.signOut()?.then(() => {
-    console.log('--------------------------------')
-    console.log('sign out');
-    console.log('--------------------------------')
-  }).catch((error) => {
+  removeItem("UserData").then(() => {
+    auth()?.signOut()?.then(() => {
+      console.log('--------------------------------')
+      console.log('sign out');
+      console.log('--------------------------------')
+    }).catch((error) => {
+    });
   });
+  checkTheme();
 };
 

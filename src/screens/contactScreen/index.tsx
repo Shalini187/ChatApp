@@ -1,12 +1,12 @@
-import { Button, Icon, Layout, Text } from "@ui-kitten/components";
+import { Icon, Layout, Text } from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
-import { FlatList, RefreshControl, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
 import { HeaderBar, Loader, ThemeProvider, WrapperContainer } from "../../components";
-import { COLORS } from "../../constants";
-import { getLoginUsers, getUsers, signOut, titleWords } from "../../utils";
+import { COLORS, fontFamily, moderateScale } from "../../constants";
+import { docGroupId, getLoginUsers, getUsers, titleWords } from "../../utils";
 import { chatStyles } from '../../styles';
 import { useSelector } from "react-redux";
-import navigationString from "../../utils/navigationString";
+import firestore from '@react-native-firebase/firestore';
 
 let { text, mycard, subText } = chatStyles || {};
 
@@ -18,6 +18,8 @@ const ContactScreen = ({ navigation, route }: any) => {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [loginUser, setLoginUser] = useState<any>('');
 
+    const [checkItems, setCheckItems] = useState<any>([]);
+
     useEffect(() => {
         init();
         getLoginUsers(setLoginUser, userData);
@@ -28,21 +30,76 @@ const ContactScreen = ({ navigation, route }: any) => {
         setRefresh(false);
     }
 
+    const isChecked = (item: any) => {
+        return checkItems?.includes(item);
+    }
+
+    const addClickItems = (item: any) => {
+        setCheckItems((check: any) => [...check, item]);
+    }
+
+    const removeClickItems = (item: any) => {
+        let temp = [...checkItems];
+        const index = checkItems?.indexOf(item);
+        if (index > -1) { // only splice array when item is found
+            temp.splice(index, 1); // 2nd parameter means remove one item only
+        }
+        setCheckItems(temp);
+    }
+
+    const onClick = (i: any) => {
+        if (!!isChecked(i)) {
+            return removeClickItems(i);
+        } else {
+            return addClickItems(i);
+        }
+    }
+
+    const createGroup = () => {
+        const groupId = docGroupId(checkItems, userData);
+        setLoading(true);
+        try {
+            let payload = {
+                name: `Group ${checkItems?.length}`,
+                uid: groupId
+            }
+            firestore().collection('groups').doc(groupId).set({ ...payload });
+        } catch (error: any) {
+            console.error(error);
+        }
+        setTimeout(() => {
+            setLoading(false);
+            navigation.goBack();
+        }, 2000);
+    }
+
     const RenderCard = ({ item, index }: any) => {
         let { name, uid, status } = item || {};
 
         return (
-            <TouchableOpacity key={index} onPress={() => navigation.navigate(navigationString.DETAILSCREEN, {
-                name, uid,
-                status: typeof (status) == "string" ? status : status.toDate().toString()
-            })}>
-                <Layout style={mycard}>
-                    <Layout style={{ height: 70, width: 70, backgroundColor: COLORS.lightGray, borderRadius: 100, marginHorizontal: 16 }}>
-                        <Text style={{ fontWeight: '900', fontSize: 18, alignSelf: "center", flex: 1, justifyContent: "center", paddingVertical: 24 }}>{titleWords(name)}</Text>
+            <TouchableOpacity key={index} onPress={() => onClick(uid)}>
+                <Layout style={mycard} level="2">
+                    {
+                        isChecked(uid) ?
+                            <Icon
+                                pack={'feather'}
+                                name={'check-square'}
+                                style={{ height: 24, width: 24, tintColor: COLORS.black, alignSelf: "center", marginRight: moderateScale(16), marginTop: moderateScale(8) }}
+                            />
+                            :
+                            <Icon
+                                pack={'feather'}
+                                name={'square'}
+                                style={{ height: 24, width: 24, tintColor: COLORS.black, alignSelf: "center", marginRight: moderateScale(16), marginTop: moderateScale(8) }}
+                            />
+                    }
+
+                    <Layout level={"4"} style={{ height: 40, width: 40, borderRadius: 100, marginRight: 16 }}>
+                        <Text style={{ fontFamily: fontFamily.helveticaBold, fontSize: moderateScale(12), alignSelf: "center", paddingVertical: moderateScale(12), textTransform: "capitalize" }}>{titleWords(name)}</Text>
                     </Layout>
-                    <Layout>
-                        <Text style={text}>{name}</Text>
-                        <Text style={{ ...subText, fontSize: 12, color: (status == 'online') ? COLORS.darkGreen : COLORS.red }}>{status}</Text>
+                    <Layout level="2">
+                        <Text style={{ ...text, fontFamily: fontFamily.helveticaMedium }}>{name}</Text>
+                        <Text style={{ ...subText, fontFamily: fontFamily.helveticaRegular, fontSize: 12, color: (status == 'online') ? COLORS.darkGreen : COLORS.red }}>{status}</Text>
                     </Layout>
                 </Layout>
             </TouchableOpacity>
@@ -58,17 +115,20 @@ const ContactScreen = ({ navigation, route }: any) => {
                     children={
                         <>
                             <Layout style={{ flex: 1 }}>
-                                <HeaderBar isBack={false} headerText={loginUser?.[0]?.name} extraProps={{ status: loginUser?.[0]?.status }} rightProps={() => (
-                                     <TouchableOpacity onPress={() => signOut(userData, setLoading)}>
-                                     <Icon
-                                         pack={'feather'}
-                                         name={'log-out'}
-                                         style={{ height: 24, width: 24, tintColor: COLORS.black }}
-                                     />
-                                 </TouchableOpacity>
-                                )} />
+                                <HeaderBar extraProps={{ status: loginUser?.[0]?.status }}
+                                onTap={() => navigation.goBack()}
+                                    leftString={"Contacts"}
+                                    rightProps={() => (
+                                        <TouchableOpacity onPress={() => createGroup()}>
+                                            <Icon
+                                                pack={'feather'}
+                                                name={'user-plus'}
+                                                style={{ height: 24, width: 24, tintColor: COLORS.black }}
+                                            />
+                                        </TouchableOpacity>
+                                    )} />
                             </Layout>
-                            <Layout style={{ flex: 4 }}>
+                            <Layout style={{ flex: 8 }}>
                                 <FlatList
                                     data={users}
                                     refreshControl={
@@ -84,7 +144,7 @@ const ContactScreen = ({ navigation, route }: any) => {
                                             <Loader />
                                         )
                                     }}
-                                    contentContainerStyle={{ paddingBottom: 100 }}
+                                    contentContainerStyle={{ paddingBottom: 100, paddingHorizontal: moderateScale(8) }}
                                     renderItem={({ item, index }) => { return <RenderCard item={item} index={index} /> }}
                                     keyExtractor={(item) => item.uid}
                                 />

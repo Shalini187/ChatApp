@@ -6,18 +6,19 @@ import { COLORS, fontFamily, moderateScale, textScale } from '../../constants';
 import { titleWords } from '../../utils';
 
 interface IHeader {
-    headerText: string;
-    isBack: boolean;
+    headerText?: string;
+    isBack?: boolean;
     onTap?: Function | any;
     onTitleCallback?: Function | any;
     rightProps?: Function | any;
     extraProps?: any;
+    leftString?: string;
 }
 
 const HeaderBar = (props: IHeader) => {
     const { theme } = useSelector((state: any) => state.auth);
 
-    const { headerText, isBack, onTap, rightProps, onTitleCallback, extraProps } = props || {};
+    const { leftString = false, headerText, isBack, onTap, rightProps, onTitleCallback, extraProps } = props || {};
     const { status } = extraProps || {};
 
     let colorStyle = (theme == "dark") ? "#F2F8FF" : "#002885";
@@ -47,7 +48,18 @@ const HeaderBar = (props: IHeader) => {
                                 </Layout>
                             </TouchableOpacity>
                             :
-                            <></>
+                            leftString ?
+                                <Layout style={{ flexDirection: "row" }}>
+                                    <TouchableOpacity onPress={onTap}>
+                                        <Icon
+                                            pack={'feather'}
+                                            name={'arrow-left'}
+                                            style={{ height: 24, width: 24, tintColor: COLORS.black }}
+                                        />
+                                    </TouchableOpacity>
+                                    <Text style={{ fontSize: textScale(20), fontFamily: fontFamily.proximaBold, textTransform: "capitalize", marginLeft: moderateScale(8) }}>{leftString}</Text>
+                                </Layout> :
+                                <></>
                 }
                 {rightProps?.() ?? <View />}
             </Layout>

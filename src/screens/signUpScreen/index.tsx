@@ -41,13 +41,12 @@ const SignupScreen = ({ navigation }: any) => {
         setLoading(true);
         try {
             const result = await auth().createUserWithEmailAndPassword(email, password);
-            console.log("result.user.uid", result.user.uid);
             let payload = {
                 name: name,
                 email: result.user.email,
                 uid: result.user.uid,
                 password: password,
-                status: "online"
+                status: "online",
             }
             onLoginSuccess(payload);
             firestore().collection('users').doc(result.user.uid).set(payload);
