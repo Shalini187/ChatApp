@@ -22,16 +22,16 @@ export const checkTheme = () => {
 }
 
 export const unregister = () => {
-    getItem("UserData").then((res: any) => {
-        const { dispatch } = store;
-        dispatch({
-            type: types.LOGIN,
-            payload: res,
-        });
-        firestore().collection('users').doc(res?.uid).update({ status: "online" });
-    }).catch((e) => {
-        console.log(e);
-    });
+    const { dispatch } = store;
+    auth().onAuthStateChanged((user) => {
+        if (user) {
+            firestore().collection('users').doc(user?.uid).update({ status: "online" });
+            dispatch({
+                type: types.LOGIN,
+                payload: user,
+            });
+        }
+    })
 }
 
 export let signIn = async (form: {}, setLoading: Function) => {
