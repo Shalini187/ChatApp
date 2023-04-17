@@ -64,6 +64,7 @@ const SignupScreen = ({ navigation }: any) => {
             children={
                 <WrapperContainer
                     bodyColor={COLORS.white}
+                    isLoading = {loading}
                     children={
                         <Layout style={{ flex: 1, top: "8%" }}>
                             <KeyboardAvoidingView behavior={"position"}>
