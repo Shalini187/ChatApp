@@ -19,11 +19,13 @@ const App = () => {
 
   return (
     <ReduxProvider store={store}>
-      <WrapperContainer>
-        <ThemeProvider
-          children={<Routes />}
-        />
-      </WrapperContainer>
+      <ThemeProvider
+        children={
+          <WrapperContainer>
+            <Routes />
+          </WrapperContainer>
+        }
+      />
     </ReduxProvider>
   )
 }

@@ -3,7 +3,7 @@ import { Image, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import { Button, Icon, Input, Layout, Text } from '@ui-kitten/components';
 import { loginStyles } from "../../styles";
 import { COLORS } from '../../constants';
-import { Loader, ThemeProvider, WrapperContainer } from '../../components';
+import { ThemeProvider, WrapperContainer } from '../../components';
 import { signIn } from '../../utils';
 
 interface IUser {
@@ -20,22 +20,17 @@ const LoginScreen = ({ navigation }: any) => {
 
     let { box1, text, img, box2 } = loginStyles || {};
 
-    if (loading) {
-        return (
-            <Loader />
-        )
-    }
-
     return (
         <ThemeProvider
             children={
                 <WrapperContainer
+                    isLoading={loading}
                     bodyColor={COLORS.white}
                     children={
                         <KeyboardAvoidingView behavior={"position"}>
                             <Layout style={box1}>
                                 <Text style={text}>Welcome to SenseHawk</Text>
-                                <Image style={img} source={require('../../assets/images/sensehawk.webp')} />
+                                <Image style={img} source={require('../../assets/images/logo.webp')} />
                             </Layout>
                             <Layout style={box2}>
                                 {Object.keys(form)?.map((item: any, index: number) => (
@@ -64,7 +59,7 @@ const LoginScreen = ({ navigation }: any) => {
                                 </Button>
                                 <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                                     <Text style={{ textAlign: "center" }}>Dont have an account ?
-                                        <Text style={{ textAlign: "center" }}>{" "}SignUp</Text>
+                                        <Text style={{ textAlign: "center", color : COLORS.darkBlue }}>{" "}SignUp</Text>
                                     </Text>
                                 </TouchableOpacity>
                             </Layout>

@@ -72,7 +72,7 @@ const SignupScreen = ({ navigation }: any) => {
                         <KeyboardAvoidingView behavior={"position"}>
                             <Layout style={box1}>
                                 <Text style={text}>Welcome to SenseHawk</Text>
-                                <Image style={img} source={require('../../assets/images/sensehawk.webp')} />
+                                <Image style={img} source={require('../../assets/images/logo.webp')} />
                             </Layout>
                             <Layout style={box2}>
                                 {Object.keys(form)?.map((item: any, index: number) => (
