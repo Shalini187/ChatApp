@@ -1,7 +1,8 @@
 import React from 'react';
-import { Icon, Layout } from '@ui-kitten/components';
-import { TouchableOpacity, View, Text } from 'react-native';
-import { COLORS, moderateScale, textScale } from '../../constants';
+import { Icon, Layout, Text } from '@ui-kitten/components';
+import { TouchableOpacity, View } from 'react-native';
+import { useSelector } from "react-redux";
+import { COLORS, fontFamily, moderateScale, textScale } from '../../constants';
 import { titleWords } from '../../utils';
 
 interface IHeader {
@@ -14,8 +15,13 @@ interface IHeader {
 }
 
 const HeaderBar = (props: IHeader) => {
+    const { theme } = useSelector((state: any) => state.auth);
+
     const { headerText, isBack, onTap, rightProps, onTitleCallback, extraProps } = props || {};
     const { status } = extraProps || {};
+
+    let colorStyle = (theme == "dark") ? "#F2F8FF" : "#002885";
+    let fontColor = (theme == "dark") ? "#002885" : "#F2F8FF";
 
     return (
         <Layout style={{ flex: 1 }} >
@@ -32,12 +38,12 @@ const HeaderBar = (props: IHeader) => {
                         :
                         headerText ?
                             <TouchableOpacity onPress={onTitleCallback} style={{ flexDirection: 'row' }}>
-                                <Layout style={{ height: 50, width: 50, backgroundColor: COLORS.blue, borderRadius: 100, marginRight: 16 }}>
-                                    <Text style={{ fontWeight: '900', textTransform: "capitalize", color: COLORS.white, fontSize: textScale(12), alignSelf: "center", paddingTop: moderateScale(16) }}>{titleWords(headerText)}</Text>
+                                <Layout style={{ height: 50, width: 50, backgroundColor: colorStyle, borderRadius: 100, marginRight: 16 }}>
+                                    <Text style={{ fontFamily: fontFamily.proximaBold, textTransform: "capitalize", alignSelf: "center", padding: moderateScale(14), color: fontColor }}>{titleWords(headerText)}</Text>
                                 </Layout>
                                 <Layout>
-                                    <Text style={{ fontSize: textScale(18), color: COLORS.black, fontWeight: '900', textTransform: "capitalize" }}>{headerText}</Text>
-                                    <Text style={{ fontSize: textScale(12), color: (status == 'online') ? COLORS.darkGreen : COLORS.red, fontWeight: '900' }}>{status}</Text>
+                                    <Text style={{ fontSize: textScale(18), fontFamily: fontFamily.proximaMedium, textTransform: "capitalize" }}>{headerText}</Text>
+                                    <Text style={{ fontSize: textScale(12), color: (status == 'online') ? COLORS.darkGreen : COLORS.red, fontFamily: fontFamily.proximaMedium }}>{status}</Text>
                                 </Layout>
                             </TouchableOpacity>
                             :

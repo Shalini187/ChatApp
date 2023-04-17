@@ -2,6 +2,8 @@ import { Dimensions, StatusBar, Platform } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
+export const hitSlop = { top: 16, bottom: 16, left: 16, right: 16 }
+
 export const fontFamily: any = {
     proximaBold: "Proxima-Bold",
     proximaExtraBold: "Proxima-ExtraBold",

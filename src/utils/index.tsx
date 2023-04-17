@@ -9,6 +9,18 @@ import types from '../redux/types';
 
 export const isIos = Platform.OS == "ios";
 
+export const checkTheme = () => {
+    getItem("Theme").then((res: any) => {
+        const { dispatch } = store;
+        dispatch({
+            type: types.CHANGE_THEME,
+            payload: res,
+        });
+    }).catch((e) => {
+        console.log(e);
+    });
+}
+
 export const unregister = () => {
     getItem("UserData").then((res: any) => {
         const { dispatch } = store;
@@ -30,7 +42,7 @@ export let signIn = async (form: {}, setLoading: Function) => {
         auth().onAuthStateChanged((user) => {
             if (user) {
                 firestore().collection('users').doc(user?.uid).update({ status: "online" });
-               onLoginSuccess(user);
+                onLoginSuccess(user);
             }
         })
         setLoading(false)
@@ -49,8 +61,7 @@ export let signOut = (user: any, setLoading: Function) => {
                 text: "YES",
                 onPress: () => {
                     setLoading(true);
-                    firestore().collection('users').doc(user?.uid).update({ status: "offline" });
-                   
+                    firestore()?.collection('users')?.doc(user?.uid)?.update({ status: "offline" });
                     setTimeout(() => {
                         logoutHandler();
                         setLoading(false);

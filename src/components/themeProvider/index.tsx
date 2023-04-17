@@ -8,6 +8,7 @@ import { FeatherIconsPack } from './feather-icons';
 import { MaterialIconsPack } from './material-icons';
 import { FoundationIconsPack } from './foundation-icons';
 import { IonicIconsPack } from './ ionic.-icons';
+import { fontFamily, textScale } from '../../constants';
 
 
 interface IProvider {
@@ -25,7 +26,7 @@ const ThemeProvider = (props: IProvider) => {
             <IconRegistry icons={[EvaIconsPack, IonicIconsPack, FeatherIconsPack, MaterialIconsPack, FoundationIconsPack]} />
             <ApplicationProvider
                 {...eva}
-                theme={{ ...eva?.[theme], ...colorStyle }}
+                theme={{ ...eva?.[theme], ...colorStyle, "fontFamily": fontFamily.helveticaMedium, "fontSize": textScale(12) }}
             >
                 {children}
             </ApplicationProvider>

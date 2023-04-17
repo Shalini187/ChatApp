@@ -1,16 +1,19 @@
 import { Icon, Layout } from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
-import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat'
+import { TouchableOpacity } from "react-native";
+import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import { HeaderBar, ThemeProvider, WrapperContainer } from "../../components";
-import { COLORS } from "../../constants";
+import { COLORS, hitSlop, moderateScale } from "../../constants";
 import { docId, getMessages, onSend } from "../../utils";
 import { useSelector } from "react-redux";
 
 
 const ChatSectionScreen = ({ navigation, route }: any) => {
-    const { userData} = useSelector((state: any) => state.auth);
-    
+    const { userData, theme } = useSelector((state: any) => state.auth);
+
+    let colorStyle = (theme == "dark") ? "#F2F8FF" : "#002885";
+    let fontColor = (theme == "dark") ? "#002885" : "#F2F8FF";
+
     const [messages, setMessages] = useState([]);
     const { uid, name, status } = route?.params || {};
 
@@ -19,13 +22,12 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
         getMessages(setMessages, docid);
     }, []);
 
-
     return (
         <ThemeProvider
             children={
                 <WrapperContainer
                     children={
-                        <Layout style={{ flex: 1, backgroundColor: COLORS.white }}>
+                        <Layout style={{ flex: 1 }}>
                             <HeaderBar isBack={false} headerText={name} extraProps={{ status }} onTitleCallback={() => navigation.goBack()} />
                             <GiftedChat
                                 messages={messages}
@@ -33,11 +35,14 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
                                 user={{
                                     _id: uid,
                                 }}
+                                isTyping={true}
+                                shouldUpdateMessage={() => { return true; }}
                                 renderSend={(props) => {
                                     const { text, messageIdGenerator, user, onSend }: any = props
                                     return (
                                         <TouchableOpacity
                                             disabled={!(text && onSend)}
+                                            hitSlop={hitSlop}
                                             onPress={
                                                 () => {
                                                     if (text && onSend) {
@@ -45,7 +50,7 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
                                                     }
                                                 }
                                             } style={{ marginHorizontal: 16 }}>
-                                            <Icon {...props} name={'send'} pack={'feather'} size={32} color={COLORS.blue} style={{ height: 32, width: 32, color: COLORS.blue }} />
+                                            <Icon {...props} name={'send'} pack={'ionic'} style={{ height: 28, width: 28, color: "#002885", marginVertical: moderateScale(8) }} />
                                         </TouchableOpacity>
                                     )
                                 }}
@@ -61,11 +66,10 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
                                 }}
                                 renderInputToolbar={(props) => {
                                     return <InputToolbar {...props}
-                                        containerStyle={{ borderTopWidth: 1.5, borderTopColor: COLORS.blue }}
+                                        containerStyle={{ borderTopWidth: 1.5, borderTopColor: fontColor }}
                                         textInputStyle={{ color: COLORS.black }}
                                     />
                                 }}
-
                             />
                         </Layout>
                     }

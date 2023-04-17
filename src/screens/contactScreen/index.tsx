@@ -54,7 +54,6 @@ const ContactScreen = ({ navigation, route }: any) => {
         <ThemeProvider
             children={
                 <WrapperContainer
-                    bodyColor={COLORS.white}
                     isLoading={loading}
                     children={
                         <>

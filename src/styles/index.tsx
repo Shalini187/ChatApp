@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
-import { moderateScaleVertical, textScale } from "../constants";
+import { moderateScale, moderateScaleVertical, textScale } from "../constants";
 
 export const imageStyle = StyleSheet.create({
     container: {
@@ -87,12 +87,12 @@ export const searchStyle = StyleSheet.create({
 export const loginStyles = StyleSheet.create({
     text: {
         fontSize: textScale(22),
-        color: "green",
         margin: 10
     },
     img: {
         width: 200,
-        height: 200
+        height: 200,
+        borderRadius: moderateScale(40)
     },
     box1: {
         alignItems: "center",
@@ -108,19 +108,18 @@ export const loginStyles = StyleSheet.create({
 export const chatStyles = StyleSheet.create({
     text: {
         fontSize: textScale(18),
-        marginLeft: 15,
+        marginLeft: moderateScale(12),
+        textTransform: "capitalize"
     },
     subText: {
-        marginLeft: 15,
+        marginLeft: moderateScale(12),
         fontSize: textScale(12)
     },
     mycard: {
         flexDirection: "row",
-        margin: 4,
-        padding: 16,
-        backgroundColor: "white",
-        borderBottomWidth: 0.75,
-        borderBottomColor: 'grey'
+        margin: moderateScale(8),
+        padding: moderateScale(8),
+        borderRadius: moderateScale(16)
     }
 });
 

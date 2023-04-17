@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { View, Text, Image, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native'
+import { Text, Image, KeyboardAvoidingView, TouchableOpacity, Alert } from 'react-native'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { useSelector } from 'react-redux';
 import { loginStyles } from '../../styles';
 import { Button, Icon, Input, Layout } from '@ui-kitten/components';
-import { COLORS, moderateScale } from '../../constants';
+import { COLORS, fontFamily, moderateScale, textScale } from '../../constants';
 import { Loader, ThemeProvider, WrapperContainer } from '../../components';
 import { onLoginSuccess } from '../../redux/actions/auth';
 
@@ -17,7 +18,12 @@ interface IUser {
 }
 
 const SignupScreen = ({ navigation }: any) => {
+    const { theme } = useSelector((state: any) => state.auth);
+
     let { box1, text, img, box2 } = loginStyles || {};
+
+    let colorStyle = (theme == "dark") ? "#F2F8FF" : "#002885";
+    let fontColor = (theme == "dark") ? "#002885" : "#F2F8FF";
 
     const [form, setForm] = useState<IUser>({ Email: '', Password: '', Name: '' });
     const [hidePassword, togglePassword] = useState<boolean>(true);
@@ -67,14 +73,13 @@ const SignupScreen = ({ navigation }: any) => {
         <ThemeProvider
             children={
                 <WrapperContainer
-                    bodyColor={COLORS.white}
                     isLoading={loading}
                     children={
                         <Layout style={{ flex: 1, top: "8%" }}>
                             <KeyboardAvoidingView behavior={"position"}>
                                 <Layout style={box1}>
-                                    <Text style={text}>Welcome to Knock!</Text>
-                                    <Image style={img} source={require('../../assets/images/logo.webp')} />
+                                    <Text style={{ ...text, fontFamily: fontFamily.proximaExtraBold }}>Welcome to Knock!</Text>
+                                    <Image resizeMode={"cover"} style={img} source={require('../../assets/images/logo.webp')} />
                                 </Layout>
                                 <Layout style={box2}>
                                     {Object.keys(form)?.map((item: any, index: number) => (
@@ -83,6 +88,7 @@ const SignupScreen = ({ navigation }: any) => {
                                             style={{ marginVertical: 12, borderRadius: moderateScale(16) }}
                                             autoCapitalize={'none'}
                                             testID={item}
+                                            textStyle={{ fontFamily: fontFamily.proximaMedium, fontSize: textScale(13) }}
                                             placeholder={item}
                                             value={form?.item}
                                             onChangeText={(nextValue: any) => {
@@ -101,10 +107,13 @@ const SignupScreen = ({ navigation }: any) => {
                                         style={{ top: '5%', borderRadius: moderateScale(16) }}
                                         appearance={'filled'}
                                         onPress={userSignup}>
-                                        SignUp
+                                        {(eva) => <Text {...eva} style={{ color: !(email && password && name) ? COLORS.lightGray : fontColor, fontFamily: fontFamily.proximaSemiBold }}>{"SIGNUP"}</Text>}
                                     </Button>
                                     <TouchableOpacity style={{ top: '18%' }} onPress={() => navigation.goBack()}>
-                                        <Text style={{ textAlign: "center" }}>Already have an account ?</Text>
+                                        <Text style={{ textAlign: "center", fontFamily: fontFamily.proximaMedium }}>Already have an account ?
+                                            <Text style={{ textAlign: "center", color: COLORS.darkGreen, fontFamily: fontFamily.helveticaMedium }}>{" "}Login
+                                            </Text>
+                                        </Text>
                                     </TouchableOpacity>
                                 </Layout>
                             </KeyboardAvoidingView>

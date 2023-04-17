@@ -1,17 +1,19 @@
-import { Button, Icon, Layout, Text } from "@ui-kitten/components";
+import { Icon, Layout, Text } from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
-import { FlatList, RefreshControl, TouchableOpacity, View } from "react-native";
+import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
 import { HeaderBar, Loader, ThemeProvider, WrapperContainer } from "../../components";
-import { COLORS } from "../../constants";
+import { COLORS, fontFamily, hitSlop, moderateScale } from "../../constants";
 import { getLoginUsers, getUsers, signOut, titleWords } from "../../utils";
 import { chatStyles } from '../../styles';
 import { useSelector } from "react-redux";
 import navigationString from "../../utils/navigationString";
+import { onChangeTheme } from "../../redux/actions/auth";
 
 let { text, mycard, subText } = chatStyles || {};
 
 const ChatScreen = ({ navigation, route }: any) => {
-    const { userData } = useSelector((state: any) => state.auth);
+    const { userData, theme } = useSelector((state: any) => state.auth);
+    let fontColor = (theme != "dark") ? "#002885" : "#F2F8FF";
 
     const [users, setUsers] = useState<any>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -36,13 +38,13 @@ const ChatScreen = ({ navigation, route }: any) => {
                 name, uid,
                 status: typeof (status) == "string" ? status : status.toDate().toString()
             })}>
-                <Layout style={mycard}>
-                    <Layout style={{ height: 70, width: 70, backgroundColor: COLORS.lightGray, borderRadius: 100, marginHorizontal: 16 }}>
-                        <Text style={{ fontWeight: '900', fontSize: 18, alignSelf: "center", flex: 1, justifyContent: "center", paddingVertical: 24 }}>{titleWords(name)}</Text>
+                <Layout style={mycard} level="2">
+                    <Layout level={"4"} style={{ height: 40, width: 40, borderRadius: 100, marginRight: 16 }}>
+                        <Text style={{ fontFamily: fontFamily.helveticaBold ,  fontSize: moderateScale(12), alignSelf: "center", paddingVertical: moderateScale(12), textTransform: "capitalize" }}>{titleWords(name)}</Text>
                     </Layout>
-                    <Layout>
-                        <Text style={text}>{name}</Text>
-                        <Text style={{ ...subText, fontSize: 12, color: (status == 'online') ? COLORS.darkGreen : COLORS.red }}>{status}</Text>
+                    <Layout level="2">
+                        <Text style={{...text, fontFamily: fontFamily.helveticaMedium }}>{name}</Text>
+                        <Text style={{ ...subText, fontFamily: fontFamily.helveticaRegular, fontSize: 12, color: (status == 'online') ? COLORS.darkGreen : COLORS.red }}>{status}</Text>
                     </Layout>
                 </Layout>
             </TouchableOpacity>
@@ -54,22 +56,30 @@ const ChatScreen = ({ navigation, route }: any) => {
         <ThemeProvider
             children={
                 <WrapperContainer
-                    bodyColor={COLORS.white}
                     isLoading={loading}
                     children={
                         <>
                             <Layout style={{ flex: 1 }}>
                                 <HeaderBar isBack={false} headerText={loginUser?.[0]?.name} extraProps={{ status: loginUser?.[0]?.status }} rightProps={() => (
-                                     <TouchableOpacity onPress={() => signOut(userData, setLoading)}>
-                                     <Icon
-                                         pack={'feather'}
-                                         name={'log-out'}
-                                         style={{ height: 24, width: 24, tintColor: COLORS.black }}
-                                     />
-                                 </TouchableOpacity>
+                                    <Layout style={{ flexDirection: "row" }}>
+                                        <TouchableOpacity hitSlop={hitSlop} onPress={() => signOut(userData, setLoading)}>
+                                            <Icon
+                                                pack={'feather'}
+                                                name={'log-out'}
+                                                style={{ height: 22, width: 22, tintColor: COLORS.red }}
+                                            />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity hitSlop={hitSlop} onPress={() => onChangeTheme(theme == "dark" ? "light" : "dark")}>
+                                            <Icon
+                                                pack={'feather'}
+                                                name={theme == "dark" ? 'sun' : "moon"}
+                                                style={{ height: 22, width: 22, tintColor: fontColor, marginLeft: moderateScale(16) }}
+                                            />
+                                        </TouchableOpacity>
+                                    </Layout>
                                 )} />
                             </Layout>
-                            <Layout style={{ flex: 4 }}>
+                            <Layout style={{ flex: 8 }}>
                                 <FlatList
                                     data={users}
                                     refreshControl={
@@ -85,7 +95,7 @@ const ChatScreen = ({ navigation, route }: any) => {
                                             <Loader />
                                         )
                                     }}
-                                    contentContainerStyle={{ paddingBottom: 100 }}
+                                    contentContainerStyle={{ paddingBottom: 100, padding: moderateScale(8) }}
                                     renderItem={({ item, index }) => { return <RenderCard item={item} index={index} /> }}
                                     keyExtractor={(item) => item.uid}
                                 />

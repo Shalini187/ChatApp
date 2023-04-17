@@ -30,6 +30,14 @@ export default function MainStack() {
                     ...options,
                 }}
             />
+             <Stack.Screen
+                name={navigationStrings.DETAILSCREEN}
+                component={Screens.ChatSectionScreen}
+                options={{
+                    headerShown: false,
+                    ...options,
+                }}
+            />
             <Stack.Screen
                 name={navigationStrings.CONTACTSCREEN}
                 component={Screens.ContactScreen}

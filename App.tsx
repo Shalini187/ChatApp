@@ -4,7 +4,7 @@ import { Provider as ReduxProvider } from "react-redux";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { ThemeProvider, WrapperContainer } from './src/components';
-import { unregister } from './src/utils';
+import { unregister, checkTheme } from './src/utils';
 import store from './src/redux/store';
 import Routes from './src/routes/routes';
 
@@ -15,6 +15,7 @@ const App = () => {
   useEffect(() => {
     LogBox.ignoreAllLogs();
     unregister();
+    checkTheme();
   }, []);
 
   return (
