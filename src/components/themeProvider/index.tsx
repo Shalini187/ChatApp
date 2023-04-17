@@ -2,15 +2,16 @@ import React from 'react';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { useSelector } from 'react-redux';
+
 import { FeatherIconsPack } from './feather-icons';
 import { MaterialIconsPack } from './material-icons';
 import { FoundationIconsPack } from './foundation-icons';
 import { IonicIconsPack } from './ ionic.-icons';
-import { useSelector } from 'react-redux';
+
 
 interface IProvider {
     children?: any;
-    theme?: string;
 }
 
 const ThemeProvider = (props: IProvider) => {
@@ -24,7 +25,7 @@ const ThemeProvider = (props: IProvider) => {
             <IconRegistry icons={[EvaIconsPack, IonicIconsPack, FeatherIconsPack, MaterialIconsPack, FoundationIconsPack]} />
             <ApplicationProvider
                 {...eva}
-                theme={{ ...eva[theme], ...colorStyle }}
+                theme={{ ...eva?.[theme], ...colorStyle }}
             >
                 {children}
             </ApplicationProvider>

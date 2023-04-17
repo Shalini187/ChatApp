@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, TextInput, KeyboardAvoidingView } from "react-native";
+import React from "react";
+import { KeyboardAvoidingView } from "react-native";
 import { Icon, Input, Layout } from '@ui-kitten/components';
 
 import { searchStyle } from '../../styles';
