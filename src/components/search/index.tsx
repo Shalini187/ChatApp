@@ -1,43 +1,47 @@
 import React from "react";
-import { KeyboardAvoidingView } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity } from "react-native";
 import { Icon, Input, Layout } from '@ui-kitten/components';
 
 import { searchStyle } from '../../styles';
-import { COLORS } from "../../constants";
+import { COLORS, hitSlop } from "../../constants";
+import { useSelector } from "react-redux";
 
-interface ISearch{
+interface ISearch {
     value: string;
-    setValue:Function;
+    setValue: Function;
 }
 
 function SystemSearch(props: ISearch) {
     let { value, setValue } = props || {};
-    let { centeredView, input, buttons, buttonSearch, buttonClose } = searchStyle || {};
+    const { theme } = useSelector((state: any) => state?.auth);
+    let colorStyle = (theme == "dark") ? "#F2F8FF" : "#002885";
+
+    let { centeredView, input } = searchStyle || {};
 
     return (
         <KeyboardAvoidingView behavior={'padding'}
-            enabled style={{ ...centeredView, backgroundColor: COLORS.white }}>
+            enabled style={{ ...centeredView }}>
             <Input
                 value={value}
-                style={{ ...input, borderColor: COLORS.black, color: COLORS.black }}
+                style={{ ...input }}
+                textStyle={{ ...input }}
                 keyboardType={'web-search'}
                 returnKeyLabel={'Go'}
-                placeholderTextColor={'#c3c3c3'}
                 placeholder={'Search here...'}
                 onChangeText={(text: string) => setValue(text)}
-            />
-            <Layout style={buttons}>
-                <Layout style={buttonSearch}>
-                    <Icon pack = {'eva'} name={'search'} color={COLORS.black} size={34} onPress={() => { }} />
-                </Layout>
-                {
-                    value ?
-                        <Layout style={buttonClose}>
-                            <Icon name={'close'} color={COLORS.black} size={28} onPress={() => setValue('')} />
-                        </Layout>
+                accessoryRight={(props: any) => {
+                    return value ?
+                        <TouchableOpacity hitSlop={hitSlop} onPress={() => setValue("")}>
+                            <Icon
+                                {...props}
+                                pack={'feather'}
+                                name={"x"}
+                                style={{ height: 22, width: 22, tintColor: colorStyle }}
+                            />
+                        </TouchableOpacity>
                         : <></>
-                }
-            </Layout>
+                }}
+            />
         </KeyboardAvoidingView>
     );
 };

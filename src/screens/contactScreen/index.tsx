@@ -123,7 +123,7 @@ const ContactScreen = ({ navigation, route }: any) => {
     }
 
     const onAddExistingGroup = () => {
-        if (checkItems?.length <= 1) return Alert.alert("Select more then one contacts to create a group");
+        if (!checkItems?.length) return Alert.alert("Select more then one contacts to create a group");
         sheetRef?.current?.open();
         setVisible(false);
     }

@@ -195,3 +195,24 @@ export let getGroupMessages = async (setMessages: Function, docid: string) => {
     }
 }
 
+export const searchOptions = {
+    isCaseSensitive: false,
+    threshold: 0.3,
+    keys: [
+        "name",
+        "uid",
+        "status"
+    ],
+};
+
+export const searchChatOptions = {
+    isCaseSensitive: false,
+    threshold: 0.3,
+    keys: [
+        "sentBy",
+        "sentTo",
+        "text",
+        "user._id",
+        "createdAt"
+    ],
+};

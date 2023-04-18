@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
-import { moderateScale, moderateScaleVertical, textScale } from "../constants";
+import { fontFamily, moderateScale, moderateScaleVertical, textScale } from "../constants";
 
 export const imageStyle = StyleSheet.create({
     container: {
@@ -57,14 +57,14 @@ export const flexStyle = StyleSheet.create({
 export const searchStyle = StyleSheet.create({
     centeredView: {
         flex: 1,
-        margin: 16,
-        width: '90%',
+        width: '100%',
+        marginTop: moderateScale(30),
         borderRadius: 30,
         position: 'absolute',
         flexDirection: 'row',
     },
     buttonSearch: {
-        right: '110%'
+        right: '100%'
     },
     buttonClose: {
         top: '4%',
@@ -72,10 +72,10 @@ export const searchStyle = StyleSheet.create({
     },
     input: {
         width: '100%',
-        fontSize: 16,
-        borderRadius: 30,
+        fontSize: textScale(13),
+        fontFamily: fontFamily.proximaMedium,
+        borderRadius: moderateScale(8),
         borderColor: '#000',
-        padding: 24,
     },
     buttons: {
         flexDirection: 'row',

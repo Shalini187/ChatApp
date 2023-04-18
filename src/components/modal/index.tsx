@@ -69,6 +69,7 @@ const SystemModal = (props: IModal) => {
                                                     <Text style={{
                                                         fontFamily: fontFamily.proximaMedium,
                                                         textAlign: 'center',
+                                                        color: (theme != "dark") ? COLORS.black : COLORS.white
                                                     }}>{'CREATE'}</Text>
                                                 </Layout>
                                             </TouchableOpacity>

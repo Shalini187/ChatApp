@@ -1,12 +1,13 @@
 import { Icon, Layout, Text } from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
+import { Keyboard, TouchableOpacity } from "react-native";
 import moment from "moment";
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
-import { HeaderBar, ThemeProvider, WrapperContainer } from "../../components";
+import { HeaderBar, SystemSearch, ThemeProvider, WrapperContainer } from "../../components";
 import { COLORS, fontFamily, hitSlop, moderateScale, textScale } from "../../constants";
-import { docId, getGroupMessages, getMessages, onSend, onSendGroup, titleWords } from "../../utils";
+import { docId, getGroupMessages, getMessages, onSend, onSendGroup, searchChatOptions } from "../../utils";
 import { useSelector } from "react-redux";
+import Fuse from "fuse.js";
 
 
 const ChatSectionScreen = ({ navigation, route }: any) => {
@@ -16,16 +17,56 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
     let fontColor = (theme == "dark") ? "#002885" : "#F2F8FF";
 
     const [messages, setMessages] = useState([]);
+    const [backData, setBackup] = useState<any>([]);
+    const [show, setShow] = useState<boolean>(false);
+    const [search, setSearch] = useState<string>("");
+    const [isKeyboardOpen, setIsKeyboardOpen] = useState<boolean>(false);
+
     const { uid, name, status } = route?.params || {};
 
     useEffect(() => {
-        if(status){
+        if (status) {
             const docid = docId(uid, userData);
-            getMessages(setMessages, docid);
-        }else{
-            getGroupMessages(setMessages, uid)
+            getMessages((v: any) => {
+                setMessages(v);
+                setBackup(v);
+            }, docid);
+        } else {
+            getGroupMessages((v: any) => {
+                setMessages(v);
+                setBackup(v);
+            }, uid)
         }
     }, []);
+
+    useEffect(() => {
+        const showKey = Keyboard.addListener("keyboardDidShow", (val) => {
+            setIsKeyboardOpen(true);
+        });
+        const hideKey = Keyboard.addListener("keyboardDidHide", (val) => {
+            setIsKeyboardOpen(false);
+        });
+
+        return () => {
+            showKey.remove();
+            hideKey.remove();
+        };
+    }, []);
+
+    const onChange = (searchText: string) => {
+        setSearch(searchText);
+        const fuseCategory = new Fuse(messages, searchChatOptions);
+        var temp = fuseCategory?.search(searchText);
+        let dummyArray: any = [], dummyArray_: any = [];
+        temp?.forEach((item) => { dummyArray?.push(item?.item) });
+        setMessages(dummyArray);
+
+        if (!searchText && !dummyArray.length) {
+            setMessages(backData);
+        }
+    };
+
+    console.log("ewe", messages);
 
     return (
         <ThemeProvider
@@ -34,12 +75,34 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
                     children={
                         <>
                             <Layout style={{ flexGrow: 1, margin: moderateScale(8) }}>
-                                <HeaderBar isBack={false} headerText={name} extraProps={{ status }} onTitleCallback={() => navigation.goBack()} />
-                                <Layout style={{ flex: 5 }}>
+                                <HeaderBar isBack={false} isSearch={() => {
+                                    if (show) {
+                                        return (
+                                            <SystemSearch
+                                                value={search}
+                                                setValue={onChange}
+                                            />
+                                        )
+                                    } else return;
+                                }} headerText={show ? false : name} extraProps={{ status }} onTitleCallback={() => navigation.goBack()}
+                                    rightProps={() => (
+                                        <Layout style={{ flexDirection: "row" }}>
+                                            <TouchableOpacity hitSlop={hitSlop} onPress={() => setShow((c) => !c)}>
+                                                <Icon
+                                                    pack={'feather'}
+                                                    name={show ? "x-circle" : 'search'}
+                                                    style={{ height: 22, width: 22, tintColor: colorStyle }}
+                                                />
+                                            </TouchableOpacity>
+                                        </Layout>
+                                    )}
+                                />
+
+                                <Layout style={{ flex: isKeyboardOpen ? 2 : 6 }}>
                                     <GiftedChat
                                         messages={messages}
                                         onSend={text => {
-                                            !!status ? onSend(text, setMessages, uid, userData) :  onSendGroup(text, setMessages, uid, userData)
+                                            !!status ? onSend(text, setMessages, uid, userData) : onSendGroup(text, setMessages, uid, userData)
                                         }}
                                         user={{
                                             _id: userData?.uid,
