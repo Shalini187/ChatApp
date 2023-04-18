@@ -147,7 +147,7 @@ export const getLoginUsers = async (setUsers: Function, user: any) => {
 
 export const titleWords = (str: string | any) => str?.match(/\b(\w)/g);
 
-export const docGroupId = (uid: any, user: any) => uid?.sort((a: string, b: string) => a.localeCompare(b)).join("-") + "-" + user.uid;
+export const docGroupId = (user: any) => Math.random().toString(36).slice(2) + "-" + user.uid;
 
 export const onSendGroup = (messageArray: any, setMessages: Function, groupid: any, user: any) => {
     const msg = messageArray[0];

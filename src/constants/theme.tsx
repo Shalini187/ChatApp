@@ -28,6 +28,8 @@ export const COLORS: any = {
     backGroundBlack: '#141414',
     cardBlack: '#1f1f1f',
 
+    blackopacity70: 'rgba(0, 0, 0, 0.7)',
+
     white: "#fff",
     white2: '#F9F9F9',
     white3:"#ffffffcc",
