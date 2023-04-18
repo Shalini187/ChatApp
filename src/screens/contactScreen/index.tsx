@@ -16,6 +16,7 @@ const ContactScreen = ({ navigation, route }: any) => {
     const sheetRef: any = useRef();
 
     const [users, setUsers] = useState<any>(null);
+    const [backupGroups, setBackupGroups] = useState<any>(null);
     const [groups, setGroups] = useState<any>(null);
     const [visible, setVisible] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -32,17 +33,21 @@ const ContactScreen = ({ navigation, route }: any) => {
     }, [refresh]);
 
     useMemo(() => {
-        const filterGroup = groups?.filter((i: any) => {
+        const filterGroup = backupGroups?.filter((i: any) => {
             const val = (i?.usersList?.find((v: any) => checkItems?.includes(v)));
-            if(val) return;
+            if (val) return;
             else return i;
         });
+
         setGroups(filterGroup);
     }, [checkItems]);
 
     const init = () => {
         getUsers(setUsers, userData);
-        getGroups(setGroups);
+        getGroups((val: any) => {
+            setGroups(val);
+            setBackupGroups(val);
+        });
         setRefresh(false);
     }
 
@@ -90,6 +95,29 @@ const ContactScreen = ({ navigation, route }: any) => {
             navigation.goBack();
             setVisible(false);
         }, 2000);
+    }
+
+    const updateGroup = () => {
+        setLoading(true);
+        groups?.map((i: any) => {
+            if (checkGroupItems?.includes(i?.uid)) {
+                try {
+                    let payload = {
+                        name: i?.name,
+                        usersList: [...new Set([...i?.usersList ,...checkItems])],
+                        uid: i?.uid
+                    };
+                    firestore().collection('groups').doc(i?.uid).update({ ...i, ...payload });
+                } catch (error: any) {
+                    console.error(error);
+                }
+            }else return;
+        });
+        setTimeout(() => {
+            setLoading(false);
+            navigation.goBack();
+            setVisible(false);
+        }, 1000);
     }
 
     const onAddExistingGroup = () => {
@@ -246,9 +274,7 @@ const ContactScreen = ({ navigation, route }: any) => {
                                             {
                                                 groups?.length > 0 ?
                                                     <TouchableOpacity
-                                                        onPress={() => {
-
-                                                        }}>
+                                                        onPress={() => updateGroup()}>
                                                         <Layout level={'4'} style={{ padding: moderateScale(16), borderRadius: moderateScale(16), margin: moderateScale(16) }}>
                                                             <Text style={{
                                                                 fontFamily: fontFamily.proximaMedium,
