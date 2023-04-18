@@ -1,6 +1,6 @@
 import { Icon, Layout, Text } from "@ui-kitten/components";
 import React, { useEffect, useState } from "react";
-import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
+import { Alert, FlatList, RefreshControl, TouchableOpacity } from "react-native";
 import { HeaderBar, Loader, ThemeProvider, WrapperContainer } from "../../components";
 import { COLORS, fontFamily, moderateScale } from "../../constants";
 import { docGroupId, getLoginUsers, getUsers, titleWords } from "../../utils";
@@ -14,6 +14,7 @@ const ContactScreen = ({ navigation, route }: any) => {
     const { userData, theme } = useSelector((state: any) => state.auth);
 
     const [users, setUsers] = useState<any>(null);
+    const [visible, setVisible] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [loginUser, setLoginUser] = useState<any>('');
@@ -56,7 +57,11 @@ const ContactScreen = ({ navigation, route }: any) => {
     }
 
     const createGroup = () => {
-        if (checkItems?.length <= 1) return;
+        if (checkItems?.length <= 1) return Alert.alert("Select more then one contacts to create a group");
+        setVisible(true);
+    }
+
+    const onVisible = () => {
         const groupId = docGroupId(checkItems, userData);
         setLoading(true);
         try {
@@ -71,6 +76,7 @@ const ContactScreen = ({ navigation, route }: any) => {
         setTimeout(() => {
             setLoading(false);
             navigation.goBack();
+            setVisible(false);
         }, 2000);
     }
 
