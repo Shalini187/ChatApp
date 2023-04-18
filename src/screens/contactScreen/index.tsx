@@ -18,7 +18,9 @@ const ContactScreen = ({ navigation, route }: any) => {
     const [users, setUsers] = useState<any>(null);
     const [backupGroups, setBackupGroups] = useState<any>(null);
     const [groups, setGroups] = useState<any>(null);
+    const [groupName, setGroupName] = useState<string>("");
     const [visible, setVisible] = useState<boolean>(false);
+    const [isModal, setModal] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [loginUser, setLoginUser] = useState<any>('');
@@ -82,7 +84,7 @@ const ContactScreen = ({ navigation, route }: any) => {
         setLoading(true);
         try {
             let payload = {
-                name: `Group ${checkItems?.length}`,
+                name: `${groupName}`,
                 usersList: checkItems,
                 uid: groupId
             }
@@ -104,14 +106,14 @@ const ContactScreen = ({ navigation, route }: any) => {
                 try {
                     let payload = {
                         name: i?.name,
-                        usersList: [...new Set([...i?.usersList ,...checkItems])],
+                        usersList: [...new Set([...i?.usersList, ...checkItems])],
                         uid: i?.uid
                     };
                     firestore().collection('groups').doc(i?.uid).update({ ...i, ...payload });
                 } catch (error: any) {
                     console.error(error);
                 }
-            }else return;
+            } else return;
         });
         setTimeout(() => {
             setLoading(false);
@@ -121,6 +123,7 @@ const ContactScreen = ({ navigation, route }: any) => {
     }
 
     const onAddExistingGroup = () => {
+        if (checkItems?.length <= 1) return Alert.alert("Select more then one contacts to create a group");
         sheetRef?.current?.open();
         setVisible(false);
     }
@@ -246,8 +249,19 @@ const ContactScreen = ({ navigation, route }: any) => {
                             <SystemModal
                                 modalVisible={visible}
                                 setModalVisible={setVisible}
-                                onCreate={onVisible}
+                                onCreate={() => {
+                                    setVisible(false);
+                                    setModal(true);
+                                }}
                                 onAddExisting={onAddExistingGroup}
+                            />
+                            <SystemModal
+                                modalVisible={isModal}
+                                setModalVisible={setModal}
+                                onCreate={onVisible}
+                                children={<></>}
+                                setGroupName = {setGroupName}
+                                groupName = {groupName}
                             />
                             <BottomUpRawSheet
                                 sheetRef={sheetRef}
