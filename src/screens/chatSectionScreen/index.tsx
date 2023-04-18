@@ -66,8 +66,6 @@ const ChatSectionScreen = ({ navigation, route }: any) => {
         }
     };
 
-    console.log("ewe", messages);
-
     return (
         <ThemeProvider
             children={
