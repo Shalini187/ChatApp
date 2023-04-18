@@ -56,6 +56,7 @@ const ContactScreen = ({ navigation, route }: any) => {
     }
 
     const createGroup = () => {
+        if (checkItems?.length <= 1) return;
         const groupId = docGroupId(checkItems, userData);
         setLoading(true);
         try {
